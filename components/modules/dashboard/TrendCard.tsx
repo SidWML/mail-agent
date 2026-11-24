@@ -21,7 +21,7 @@ export default function TrendCard({ trends, categories, filters, chartHeight }: 
   const busiest = [...trends].sort((a, b) => sum(b.weeks) - sum(a.weeks)).slice(0, SHOWN_CATEGORIES);
   const weekCount = busiest[0]?.weeks.length ?? 0;
   const weeks = Array.from({ length: weekCount }, (_, index) => ({
-    week: index === weekCount - 1 ? "Now" : `-${weekCount - 1 - index}w`,
+    week: index === weekCount - 1 ? "This week" : `${weekCount - 1 - index}w ago`,
     ...Object.fromEntries(busiest.map((trend) => [trend.name, trend.weeks[index] ?? 0])),
   }));
   const series = busiest.map((trend, index) => ({
@@ -35,7 +35,7 @@ export default function TrendCard({ trends, categories, filters, chartHeight }: 
   return (
     <ChartCard
       title="Category trend"
-      subtitle={riser && riserChange && riserChange.percent > 0 ? `${riser.name} is rising fastest (${riserChange.label})` : "No category is rising"}
+      subtitle={riser && riserChange && riserChange.percent > 0 ? `Mails per week · ${riser.name} is rising fastest (${riserChange.label})` : "Mails per week · no category is rising"}
       spanClass="col-span-4"
     >
       <TrendLinesChart weeks={weeks} series={series} height={chartHeight - 18} />

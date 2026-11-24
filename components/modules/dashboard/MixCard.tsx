@@ -58,8 +58,16 @@ export default function MixCard({ urgency, sentiment, filters, sentimentTrend, t
         <MixRow label="Urgency" segments={urgencySegments} />
         <MixRow label="Sentiment" segments={sentimentSegments} />
         <div>
-          <p className="mb-1 text-[11px] font-semibold tracking-[0.06em] text-ink-muted uppercase">Tone per day</p>
-          <SentimentTrendChart points={trendPoints} height={96} />
+          <p className="mb-1 text-[11px] font-semibold tracking-[0.06em] text-ink-muted uppercase">Mails per day, by tone</p>
+          <SentimentTrendChart points={trendPoints} height={84} />
+          <ul className="mt-1 flex flex-wrap gap-x-2.5 text-[11px]">
+            {["Positive", "Neutral", "Negative"].map((tone) => (
+              <li key={tone} className="flex items-center gap-1.5">
+                <span className="h-0.5 w-3.5" style={{ background: SENTIMENT_COLORS[tone] }} />
+                {tone}
+              </li>
+            ))}
+          </ul>
         </div>
       </div>
     </ChartCard>

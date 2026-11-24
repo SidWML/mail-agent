@@ -17,6 +17,8 @@ export interface MailListQuery {
   domain?: string;
   hasAttachment?: "1";
   needsReview?: "1";
+  /** Only mails past the reply time of their category. */
+  slaBreached?: "1";
   sort?: string;
   page?: number;
   pageSize?: number;

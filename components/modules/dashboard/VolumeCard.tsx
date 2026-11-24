@@ -31,7 +31,17 @@ export default function VolumeCard({ volume, filters, todayIso, chartHeight }: V
       spanClass="col-span-4"
       seeMailsHref={getMailsHref(filters, { tab: "all", withDate: true })}
     >
-      <VolumeAreaChart points={points} height={chartHeight} />
+      <ul className="mb-1 flex gap-4 text-xs text-ink-3">
+        <li className="flex items-center gap-1.5">
+          <span className="h-0.5 w-5 bg-brand" />
+          Received
+        </li>
+        <li className="flex items-center gap-1.5">
+          <span className="w-5 border-t-2 border-dashed border-bar-dark" />
+          Acted (finished)
+        </li>
+      </ul>
+      <VolumeAreaChart points={points} height={chartHeight - 20} />
     </ChartCard>
   );
 }

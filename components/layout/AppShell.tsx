@@ -38,18 +38,18 @@ export default async function AppShell({ activePath, banner, notice, overlay, ch
         Skip to content
       </a>
       <header className="shrink-0 border-b border-line-header bg-card">
-        <div className="flex min-h-16 items-center gap-8 px-6">
+        <div className="flex min-h-16 items-center gap-3 px-4 md:gap-8 md:px-6">
           <Link href="/inbox" className="flex items-center gap-3">
             <span className="flex size-9 items-center justify-center bg-brand text-white">
               <Icon name="mail" size={20} strokeWidth={1.75} />
             </span>
-            <span className="flex flex-col">
+            <span className="flex flex-col max-md:hidden">
               <span className="text-base leading-[1.2] font-semibold whitespace-nowrap">Mailbox Agent</span>
               <span className="text-xs text-ink-muted">ai@schindler.com</span>
             </span>
           </Link>
 
-          <nav aria-label="Main" className="flex gap-1 self-stretch">
+          <nav aria-label="Main" className="flex min-w-0 gap-1 self-stretch overflow-x-auto">
             {visibleNavItems.map((item) => {
               const active = item.href === activePath;
               return (
@@ -59,7 +59,7 @@ export default async function AppShell({ activePath, banner, notice, overlay, ch
                   title={item.label}
                   aria-current={active ? "page" : undefined}
                   className={cn(
-                    "flex min-h-16 items-center gap-2 border-b-[3px] px-4 text-sm",
+                    "flex min-h-16 items-center gap-2 border-b-[3px] px-2.5 text-sm md:px-4",
                     active ? "border-brand font-semibold text-ink" : "border-transparent font-medium text-ink-3",
                   )}
                 >
@@ -70,7 +70,7 @@ export default async function AppShell({ activePath, banner, notice, overlay, ch
             })}
           </nav>
 
-          <div className="ml-auto flex items-center gap-3">
+          <div className="ml-auto flex shrink-0 items-center gap-2 md:gap-3">
             {/* Viewers get no alerts (see the permission table). */}
             {currentUser.role !== "viewer" && <AlertsBell />}
             <UserSwitcher currentUser={currentUser} allUsers={allUsers} />

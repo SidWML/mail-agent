@@ -15,6 +15,17 @@ interface ChartCardProps {
   children: ReactNode;
 }
 
+/** Written out in full so Tailwind can find every class (it cannot see names built with replace). */
+const LARGE_SPAN: Record<string, string> = {
+  "col-span-2": "lg:col-span-2",
+  "col-span-3": "lg:col-span-3",
+  "col-span-4": "lg:col-span-4",
+  "col-span-5": "lg:col-span-5",
+  "col-span-6": "lg:col-span-6",
+  "col-span-7": "lg:col-span-7",
+  "col-span-8": "lg:col-span-8",
+};
+
 /** The compact card every chart sits in: title, one line, the chart, and a link to the mails. */
 export default function ChartCard({ title, subtitle, spanClass, dark, seeMailsHref, children }: ChartCardProps) {
   return (
@@ -24,7 +35,7 @@ export default function ChartCard({ title, subtitle, spanClass, dark, seeMailsHr
         dark ? "bg-bar-dark text-white" : "bg-card text-bar-dark",
         // The designed width applies from large screens up; tablets get two cards per row, small screens one.
         "col-span-12 md:col-span-6",
-        spanClass.replace("col-span-", "lg:col-span-"),
+        LARGE_SPAN[spanClass],
       )}
     >
       <div className="flex items-start gap-2">

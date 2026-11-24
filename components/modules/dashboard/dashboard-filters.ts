@@ -71,6 +71,8 @@ interface MailsLinkOptions {
   /** Search text, for example a sender name. */
   search?: string;
   sort?: string;
+  /** Only mails past their reply time (SLA). */
+  late?: boolean;
   /** Overrides the dashboard category (used by the category chart rows). */
   category?: string;
   mailId?: string;
@@ -102,6 +104,7 @@ export function getMailsHref(filters: DashboardFilters, options: MailsLinkOption
       to: options.day ?? (options.withDate && isCustom ? filters.to : undefined),
       q: options.search,
       sort: options.sort,
+      late: options.late ? "1" : undefined,
       mail: options.mailId,
     },
   );

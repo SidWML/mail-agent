@@ -20,13 +20,13 @@ interface StatusDonutChartProps {
   centerLabel: string;
 }
 
-/** Donut with the total in the middle and a legend on the right. Hover a slice for its count; click it to open its mails. */
+/** Donut with the total in the middle and a legend underneath. Hover a slice for its count; click it to open its mails. */
 export default function StatusDonutChart({ slices, height, centerValue, centerLabel }: StatusDonutChartProps) {
   const total = slices.reduce((sum, slice) => sum + slice.value, 0) || 1;
 
   return (
-    <div className="flex items-center gap-3">
-      <div className="relative shrink-0 [&_.recharts-sector]:cursor-pointer [&_.recharts-sector:hover]:opacity-85" style={{ width: height, height }}>
+    <div className="flex flex-col items-center gap-3">
+      <div className="relative shrink-0 [&_.recharts-sector]:cursor-pointer [&_.recharts-sector:hover]:opacity-85" style={{ width: height - 40, height: height - 40 }}>
         <ResponsiveContainer width="100%" height="100%">
           <PieChart>
             <Tooltip content={<ChartTooltip />} />
@@ -52,7 +52,7 @@ export default function StatusDonutChart({ slices, height, centerValue, centerLa
         </div>
       </div>
 
-      <ul className="flex min-w-0 flex-1 flex-col gap-1">
+      <ul className="flex w-full min-w-0 flex-col gap-1">
         {slices.map((slice) => (
           <li key={slice.name}>
             <a href={slice.href} className="flex items-center gap-2 text-xs hover:underline">

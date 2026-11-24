@@ -36,6 +36,7 @@ export const FILTER_PARAM_KEYS = {
   assignee: ["assignee"],
   date: ["date", "from", "to"],
   review: ["review"],
+  late: ["late"],
   attachment: ["attachment"],
   sentiment: ["sentiment"],
   domain: ["domain"],
@@ -56,6 +57,8 @@ export interface InboxFilters {
   dateFrom: string;
   dateTo: string;
   needsReviewOnly: boolean;
+  /** Only mails past their reply time (SLA). */
+  lateOnly: boolean;
   hasAttachment: boolean;
   sentiments: string[];
   domain: string;
@@ -76,6 +79,7 @@ export function parseInboxFilters(params: SearchParams): InboxFilters {
     dateFrom: readParam(params, "from") ?? "",
     dateTo: readParam(params, "to") ?? "",
     needsReviewOnly: readParam(params, "review") === "1",
+    lateOnly: readParam(params, "late") === "1",
     hasAttachment: readParam(params, "attachment") === "1",
     sentiments: readList(params, "sentiment"),
     domain: readParam(params, "domain") ?? "",
@@ -100,6 +104,7 @@ export function toMailListQuery(filters: InboxFilters, page: number): MailListQu
     domain: filters.domain,
     hasAttachment: filters.hasAttachment ? "1" : undefined,
     needsReview: filters.needsReviewOnly ? "1" : undefined,
+    slaBreached: filters.lateOnly ? "1" : undefined,
     sort: filters.sort,
     page,
     pageSize: PAGE_SIZE,
@@ -115,6 +120,7 @@ export function hasActiveFilters(filters: InboxFilters) {
     filters.assignee !== "" ||
     filters.date !== "" ||
     filters.needsReviewOnly ||
+    filters.lateOnly ||
     filters.hasAttachment ||
     filters.sentiments.length > 0 ||
     filters.domain !== ""

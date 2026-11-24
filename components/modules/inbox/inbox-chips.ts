@@ -50,6 +50,7 @@ export function buildFilterChips({ filters, params, categories, allUsers }: Buil
   }
 
   if (filters.needsReviewOnly) add("Needs review", FILTER_PARAM_KEYS.review);
+  if (filters.lateOnly) add("Past reply time (SLA)", FILTER_PARAM_KEYS.late);
   if (filters.hasAttachment) add("Has attachment", FILTER_PARAM_KEYS.attachment);
   if (filters.sentiments.length) add(`Sentiment: ${filters.sentiments.join(", ")}`, FILTER_PARAM_KEYS.sentiment);
   if (filters.domain) add(`Sender domain: ${filters.domain}`, FILTER_PARAM_KEYS.domain);

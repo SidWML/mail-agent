@@ -1,6 +1,6 @@
 import { handleRoute } from '@/server/handle-route';
 import { db, USERS } from '@/server/store';
-import { needsReview, tabMatch, toRow } from '@/server/rules';
+import { needsReview, slaBreached, tabMatch, toRow } from '@/server/rules';
 import { category, isOpen } from '@/server/rules';
 import { ApiError } from '@/server/actions';
 
@@ -64,6 +64,7 @@ export const GET = handleRoute('all', async (req, u) => {
     if (domain && !m.domain.includes(domain)) return false;
     if (sp.get('hasAttachment') === '1' && !m.thread.some((x) => x.attachments.length)) return false;
     if (sp.get('needsReview') === '1' && !needsReview(m)) return false;
+    if (sp.get('slaBreached') === '1' && !slaBreached(m)) return false;
     return true;
   });
 

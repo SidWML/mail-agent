@@ -24,7 +24,7 @@ export default function GaugeChart({ percent, height, target, fill, track }: Gau
       </ResponsiveContainer>
       <div className="pointer-events-none absolute inset-x-0 bottom-1 flex flex-col items-center">
         <span className="text-[26px] leading-none font-light">{percent}%</span>
-        <span className="text-[10.5px] opacity-70">goal {target}%</span>
+        <span className="text-[10.5px] opacity-70">answered in time · goal {target}%</span>
       </div>
     </div>
   );

@@ -13,9 +13,9 @@ interface UserSwitcherProps {
 export default function UserSwitcher({ currentUser, allUsers }: UserSwitcherProps) {
   return (
     <details name="filter-menu" className="dropdown group relative">
-      <summary className="flex items-center gap-3 border border-line-control bg-card py-1.5 pr-3 pl-1.5 transition-colors duration-150 ease-out hover:border-ink-faint hover:bg-stripe group-open:border-brand" title="Switch demo user">
+      <summary className="flex items-center gap-3 border border-line-control bg-card py-1.5 pr-2 pl-1.5 sm:pr-3 max-sm:gap-1 transition-colors duration-150 ease-out hover:border-ink-faint hover:bg-stripe group-open:border-brand" title="Switch demo user">
         <Avatar initials={currentUser.initials} size="large" />
-        <span className="flex flex-col gap-[3px]">
+        <span className="flex flex-col gap-[3px] max-sm:hidden">
           <span className="text-[13px] leading-none font-semibold">{currentUser.name}</span>
           <span className="self-start whitespace-nowrap bg-brand-tint px-1.5 py-0.5 text-[11px] font-semibold text-brand-dark">
             {ROLE_LABELS[currentUser.role]}
