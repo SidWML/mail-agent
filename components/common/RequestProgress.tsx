@@ -1,5 +1,7 @@
 "use client";
 
+import { fadeOutClosedOverlays } from "@/lib/navigate";
+
 /**
  * Shows that a request is on its way: a thin red bar slides across the top of the screen,
  * and the button that was pressed shows a small spinner and cannot be pressed twice.
@@ -16,6 +18,7 @@ function watchRequests(element: HTMLDivElement | null) {
     root.removeAttribute("data-busy");
     document.querySelectorAll("form[data-pending]").forEach((form) => form.removeAttribute("data-pending"));
     document.querySelectorAll("button[aria-busy]").forEach((button) => button.removeAttribute("aria-busy"));
+    document.querySelectorAll("[data-closing]").forEach((overlay) => overlay.removeAttribute("data-closing"));
   };
 
   const start = () => {
@@ -41,7 +44,10 @@ function watchRequests(element: HTMLDivElement | null) {
     if (!link || link.target === "_blank" || link.hasAttribute("download")) return;
     const url = new URL(link.href, window.location.href);
     const isSameAddress = url.pathname === window.location.pathname && url.search === window.location.search;
-    if (url.origin === window.location.origin && !isSameAddress) start();
+    if (url.origin === window.location.origin && !isSameAddress) {
+      fadeOutClosedOverlays(link.href);
+      start();
+    }
   };
 
   document.addEventListener("submit", onSubmit);

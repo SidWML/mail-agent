@@ -1,5 +1,6 @@
-import { cookies, headers } from "next/headers";
+import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
+import { callApi } from "@/server/router";
 
 export const DEFAULT_USER_ID = "u-rajeev";
 export const USER_COOKIE = "user-id";
@@ -21,28 +22,17 @@ export async function getCurrentUserId() {
   return store.get(USER_COOKIE)?.value ?? DEFAULT_USER_ID;
 }
 
-async function getOrigin() {
-  const requestHeaders = await headers();
-  const host = requestHeaders.get("host");
-  const protocol = host?.startsWith("localhost") ? "http" : "https";
-  return `${protocol}://${host}`;
-}
-
 type RequestOptions = {
   method?: "GET" | "POST" | "PUT" | "PATCH" | "DELETE";
   body?: unknown;
 };
 
-/** One place that talks to /api. Every service function goes through here. */
+/** One place that talks to the API. Every service function goes through here (see server/router.ts for how the call is made). */
 export async function request<T>(path: string, options: RequestOptions = {}): Promise<T> {
-  const response = await fetch(`${await getOrigin()}/api${path}`, {
+  const response = await callApi(path, {
     method: options.method ?? (options.body ? "POST" : "GET"),
-    headers: {
-      "x-user-id": await getCurrentUserId(),
-      "content-type": "application/json",
-    },
-    body: options.body ? JSON.stringify(options.body) : undefined,
-    cache: "no-store",
+    userId: await getCurrentUserId(),
+    body: options.body,
   });
 
   if (!response.ok) {

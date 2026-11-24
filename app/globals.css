@@ -324,6 +324,16 @@ html {
   }
 }
 
+/* A dialog or the drawer that was just closed fades out at once, while the server prepares the page behind it. */
+[data-overlay][data-closing] {
+  opacity: 0;
+  transform: translateY(6px);
+  pointer-events: none;
+  transition:
+    opacity 140ms ease-out,
+    transform 140ms ease-out;
+}
+
 /* ---- A request is on its way ---- */
 /* The bar waits a moment (90 ms) so very fast pages do not flash it. */
 .request-progress {

@@ -47,7 +47,7 @@ export default function Modal({
   );
 
   return (
-    <EscapeKey closeHref={closeHref} className="fixed inset-0 z-50 flex items-center justify-center p-4">
+    <EscapeKey closeHref={closeHref} dataOverlay="dialog" className="fixed inset-0 z-50 flex items-center justify-center p-4">
       <Link href={closeHref} aria-label="Close" className="animate-fade absolute inset-0 bg-[rgba(26,26,28,0.52)]" />
       <div
         role="dialog"

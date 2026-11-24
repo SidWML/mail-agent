@@ -1,6 +1,8 @@
-/** Click on a chart: open the inbox list that holds the same mails. A plain page change, no router state. */
+import { goTo as goToAddress } from "@/lib/navigate";
+
+/** Click on a chart: open the inbox list that holds the same mails, without reloading the page. */
 export function goTo(href: string | undefined) {
-  if (href) window.location.assign(href);
+  if (href) goToAddress(href);
 }
 
 /** Recharts passes the clicked position as an index in different shapes; this reads it safely. */

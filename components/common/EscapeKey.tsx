@@ -1,6 +1,7 @@
 "use client";
 
 import type { ReactNode } from "react";
+import { fadeOutClosedOverlays, goTo } from "@/lib/navigate";
 
 interface EscapeKeyProps {
   /** Where to go when Escape is pressed. */
@@ -10,14 +11,17 @@ interface EscapeKeyProps {
    * or "focus:<css selector>" to move the cursor to a field. Keys are ignored while typing in a field.
    */
   shortcuts?: Record<string, string>;
+  /** "dialog" or "drawer": lets it fade out the moment it is closed (see lib/navigate.ts). */
+  dataOverlay?: "dialog" | "drawer";
   className?: string;
   children: ReactNode;
 }
 
 /** Wrapper that takes focus, closes on Escape, and runs keyboard shortcuts. Plain event handlers, no state. */
-export default function EscapeKey({ closeHref, shortcuts, className, children }: EscapeKeyProps) {
+export default function EscapeKey({ closeHref, shortcuts, dataOverlay, className, children }: EscapeKeyProps) {
   return (
     <div
+      data-overlay={dataOverlay}
       tabIndex={-1}
       className={`outline-none ${className ?? ""}`}
       ref={(element) => {
@@ -26,7 +30,8 @@ export default function EscapeKey({ closeHref, shortcuts, className, children }:
       }}
       onKeyDown={(event) => {
         if (event.key === "Escape") {
-          window.location.assign(closeHref);
+          fadeOutClosedOverlays(closeHref);
+          goTo(closeHref);
           return;
         }
         if (!shortcuts || event.ctrlKey || event.metaKey || event.altKey) return;
@@ -38,7 +43,10 @@ export default function EscapeKey({ closeHref, shortcuts, className, children }:
         event.preventDefault();
         if (action.startsWith("click:")) document.querySelector<HTMLElement>(action.slice(6))?.click();
         else if (action.startsWith("focus:")) document.querySelector<HTMLElement>(action.slice(6))?.focus();
-        else window.location.assign(action);
+        else {
+          fadeOutClosedOverlays(action);
+          goTo(action);
+        }
       }}
     >
       {children}

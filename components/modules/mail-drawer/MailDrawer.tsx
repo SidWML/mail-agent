@@ -58,7 +58,7 @@ export default async function MailDrawer({ detail, currentUser, links, position,
   if (perms.del) shortcuts.d = links.dialog("delete");
 
   return (
-    <EscapeKey closeHref={links.close} shortcuts={shortcuts} className="fixed inset-0 z-40">
+    <EscapeKey closeHref={links.close} shortcuts={shortcuts} dataOverlay="drawer" className="fixed inset-0 z-40">
       <Link href={links.close} aria-label="Close mail" className="animate-fade absolute inset-0 bg-[rgba(26,26,28,0.52)]" />
 
       <aside className="animate-drawer absolute inset-y-0 right-0 flex w-full lg:w-[84%] flex-col border-l border-line-strong bg-page shadow-drawer">
