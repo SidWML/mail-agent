@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Add category</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#F3F3F4;font-family:Inter,system-ui,sans-serif;color:#1A1A1A}
+a{color:inherit;text-decoration:none}
+button,input,textarea,select{font-family:inherit}
+</style>
+</helmet>
+<div style="width:720px;height:570px;box-sizing:border-box;background:#D5D7DC;font-family:Inter,system-ui,sans-serif;color:#1A1A1A;overflow:hidden">
+<div style="padding:40px;display:flex;flex-direction:column;align-items:flex-start;box-sizing:border-box"><div style="width:640px;background:#fff;border:1px solid #C4C7CD;box-shadow:0 12px 40px rgba(0,0,0,.18)">
+<div style="padding:22px 28px 14px;display:flex;justify-content:space-between;align-items:flex-start;gap:12px">
+<div><div style="font-size:20px;font-weight:600">Add category</div><div style="font-size:13.5px;color:#5A5A5A;margin-top:4px;line-height:1.5">Changes apply immediately. No software release is needed.</div></div>
+<span style="width:30px;height:30px;display:flex;align-items:center;justify-content:center"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#5A5A5A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex:none"><path d="M6 6l12 12M18 6L6 18"/></svg></span></div>
+<div style="padding:6px 28px 22px;display:flex;flex-direction:column;gap:14px"><div><div style="font-size:12.5px;font-weight:600;margin-bottom:6px">Category name<span style="color:#E3000F"> *</span></div><div style="min-height:40px;border:1px solid #C9CBD0;padding:0 12px;display:flex;align-items:center;justify-content:space-between;font-size:13.5px;color:#8A8A8A;box-sizing:border-box;background:#fff;padding-top:0">For example: Billing question</div></div><div><div style="font-size:12.5px;font-weight:600;margin-bottom:6px">Typical mail (helps the AI)<span style="color:#E3000F"> *</span></div><div style="min-height:70px;border:1px solid #C9CBD0;padding:10px 12px;font-size:13.5px;color:#8A8A8A;line-height:1.5;box-sizing:border-box;background:#fff">Describe the kind of mail that belongs here</div></div><div><div style="font-size:12.5px;font-weight:600;margin-bottom:6px">SLA: reply within<span style="color:#E3000F"> *</span></div><div style="display:flex;align-items:center;gap:10px"><div style="width:110px;min-height:40px;border:1px solid #C9CBD0;display:flex;align-items:center;padding:0 12px;font-size:14px;box-sizing:border-box"></div><span style="font-size:13.5px;color:#5A5A5A">hours</span><span style="font-size:12px;color:#8A8A8A;margin-left:8px">Mails past this time count as an SLA breach and trigger an alert.</span></div></div><div style="display:flex;gap:12px;align-items:flex-start"><span style="width:36px;height:20px;background:#E3000F;display:flex;align-items:center;justify-content:flex-end;padding:2px;box-sizing:border-box;flex:none"><span style="width:16px;height:16px;background:#fff"></span></span><div><div style="font-size:13.5px;font-weight:600">Active</div><div style="font-size:12.5px;color:#5A5A5A;margin-top:2px">Retired categories are no longer chosen by the AI, but old mails keep them.</div></div></div></div>
+<div style="display:flex;justify-content:flex-end;gap:10px;padding:16px 28px;background:#F5F6F8;border-top:1px solid #E3E5E9"><a href="Owner_Categories.dc.html" style="display:inline-flex;align-items:center;justify-content:center;gap:6px;height:38px;padding:0 12px;font-size:12.5px;font-weight:600;white-space:nowrap;box-sizing:border-box;cursor:pointer;border:1px solid #C9CBD0;background:#fff;color:#1A1A1A;padding:0 20px;font-size:13.5px;">Cancel</a><a href="Owner_Categories.dc.html" style="display:inline-flex;align-items:center;justify-content:center;gap:6px;height:38px;padding:0 12px;font-size:12.5px;font-weight:600;white-space:nowrap;box-sizing:border-box;cursor:pointer;border:1px solid #E3000F;background:#E3000F;color:#fff;padding:0 20px;font-size:13.5px;">Save category</a></div>
+</div><div style="margin-top:14px;font-size:12px;color:#444;background:#fff;border:1px dashed #9A9DA4;padding:6px 10px;max-width:640px;box-sizing:border-box">Doc AI-08 (Should): Owner can add, rename, merge or retire categories without a release; existing mails are re-categorized on request. FR-27 / persona table: SLA per category. “Typical mail” follows the doc’s taxonomy table.</div></div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":720,"height":570}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return {};
+  }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>High urgency alert</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#F3F3F4;font-family:Inter,system-ui,sans-serif;color:#1A1A1A}
+a{color:inherit;text-decoration:none}
+button,input,textarea,select{font-family:inherit}
+</style>
+</helmet>
+<div style="width:740px;height:480px;box-sizing:border-box;background:#D5D7DC;font-family:Inter,system-ui,sans-serif;color:#1A1A1A;overflow:hidden">
+<div style="padding:40px;display:flex;flex-direction:column;align-items:flex-start;gap:14px;box-sizing:border-box"><div style="width:660px;background:#fff;border:1px solid #C4C7CD;box-shadow:0 8px 28px rgba(0,0,0,.14)">
+<div style="display:flex;align-items:center;gap:10px;padding:12px 18px;background:#F5F6F8;border-bottom:1px solid #E3E5E9"><span style="width:26px;height:26px;background:#E3000F;display:flex;align-items:center;justify-content:center"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex:none"><path d="M3 5h18v14H3zM3 6l9 7 9-7"/></svg></span>
+<span style="font-size:13px;font-weight:600">Mailbox Agent · team channel</span><span style="margin-left:auto;font-size:12px;color:#6B6B6B">09:13 · 1 min after arrival</span></div>
+<div style="padding:18px 20px;display:flex;flex-direction:column;gap:12px">
+<div style="display:flex;align-items:center;gap:8px"><span style="display:inline-flex;align-items:center;border-radius:999px;padding:5px 12px;font-size:12.5px;font-weight:600;white-space:nowrap;background:#FDE7E9;color:#A8000B">Urgency: High</span><span style="display:inline-flex;align-items:center;gap:6px;border-radius:4px;padding:4px 9px 4px 7px;font-size:12.5px;font-weight:500;white-space:nowrap;background:#F3F3F4"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#E3000F" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex:none"><path d="M12 3L2 20h20L12 3zM12 10v4M12 17.2v.01"/></svg>Technical issue</span></div>
+<div style="font-size:17px;font-weight:600">Work Agent is down for the Finance team</div>
+<div style="display:flex;gap:6px;align-items:flex-start;font-size:13.5px;color:#3A3A3A;line-height:1.5"><svg width="13" height="13" viewBox="0 0 24 24" fill="#E3000F" aria-hidden="true" style="flex:none"><path d="M12 2l2.2 6.3L21 10l-6.8 1.7L12 18l-2.2-6.3L3 10l6.8-1.7zM19 15l.9 2.1L22 18l-2.1.9L19 21l-.9-2.1L16 18l2.1-.9z"/></svg><span>Finance users in Zurich see an error since 08:40; month-end close at risk.</span></div>
+<div style="font-size:12.5px;color:#5A5A5A">From Anika Rao · a.rao@schindler.com · <strong>Unassigned</strong></div>
+<div style="display:flex;gap:8px;margin-top:4px"><a href="Agent_D_New.dc.html" style="display:inline-flex;align-items:center;justify-content:center;gap:6px;height:36px;padding:0 12px;font-size:12.5px;font-weight:600;white-space:nowrap;box-sizing:border-box;cursor:pointer;border:1px solid #E3000F;background:#E3000F;color:#fff;padding:0 18px">Open mail</a><a href="Mail.dc.html" style="display:inline-flex;align-items:center;justify-content:center;gap:6px;height:36px;padding:0 12px;font-size:12.5px;font-weight:600;white-space:nowrap;box-sizing:border-box;cursor:pointer;border:1px solid #E3000F;background:#fff;color:#E3000F;padding:0 18px">Take it</a></div>
+</div></div><div style="font-size:12px;color:#444;background:#fff;border:1px dashed #9A9DA4;padding:6px 10px;max-width:660px;box-sizing:border-box;line-height:1.55">Doc FR-26 (Should): alert for High-urgency mails to the team, by Teams channel or email, within 2 minutes of arrival. “Take it” in the alert is a design suggestion; the doc only requires the alert.</div></div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":740,"height":480}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return {};
+  }
+}
+</script>
+</body>
+</html>

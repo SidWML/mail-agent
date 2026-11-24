@@ -1,0 +1,47 @@
+"use client";
+
+import type { ReactNode } from "react";
+
+interface EscapeKeyProps {
+  /** Where to go when Escape is pressed. */
+  closeHref: string;
+  /**
+   * Extra keys. Each value is an address to open, "click:<css selector>" to press a button,
+   * or "focus:<css selector>" to move the cursor to a field. Keys are ignored while typing in a field.
+   */
+  shortcuts?: Record<string, string>;
+  className?: string;
+  children: ReactNode;
+}
+
+/** Wrapper that takes focus, closes on Escape, and runs keyboard shortcuts. Plain event handlers, no state. */
+export default function EscapeKey({ closeHref, shortcuts, className, children }: EscapeKeyProps) {
+  return (
+    <div
+      tabIndex={-1}
+      className={`outline-none ${className ?? ""}`}
+      ref={(element) => {
+        // Focus the wrapper once, unless something inside already has focus (an autofocus field).
+        if (element && !element.contains(document.activeElement)) element.focus({ preventScroll: true });
+      }}
+      onKeyDown={(event) => {
+        if (event.key === "Escape") {
+          window.location.assign(closeHref);
+          return;
+        }
+        if (!shortcuts || event.ctrlKey || event.metaKey || event.altKey) return;
+        const target = event.target as HTMLElement;
+        if (target.closest("input, textarea, select, [contenteditable='true']")) return;
+
+        const action = shortcuts[event.key] ?? shortcuts[event.key.toLowerCase()];
+        if (!action) return;
+        event.preventDefault();
+        if (action.startsWith("click:")) document.querySelector<HTMLElement>(action.slice(6))?.click();
+        else if (action.startsWith("focus:")) document.querySelector<HTMLElement>(action.slice(6))?.focus();
+        else window.location.assign(action);
+      }}
+    >
+      {children}
+    </div>
+  );
+}

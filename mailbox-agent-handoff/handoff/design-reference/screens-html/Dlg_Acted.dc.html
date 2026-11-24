@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Mark as acted</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#F3F3F4;font-family:Inter,system-ui,sans-serif;color:#1A1A1A}
+a{color:inherit;text-decoration:none}
+button,input,textarea,select{font-family:inherit}
+</style>
+</helmet>
+<div style="width:680px;height:760px;box-sizing:border-box;background:#D5D7DC;font-family:Inter,system-ui,sans-serif;color:#1A1A1A;overflow:hidden">
+<div style="padding:40px;display:flex;flex-direction:column;align-items:flex-start;box-sizing:border-box"><div style="width:600px;background:#fff;border:1px solid #C4C7CD;box-shadow:0 12px 40px rgba(0,0,0,.18)">
+<div style="padding:22px 28px 14px;display:flex;justify-content:space-between;align-items:flex-start;gap:12px">
+<div><div style="font-size:20px;font-weight:600">Mark as acted</div><div style="font-size:13.5px;color:#5A5A5A;margin-top:4px;line-height:1.5">Choose how this mail was handled. It moves to Acted / Closed and leaves the Active view.</div></div>
+<span style="width:30px;height:30px;display:flex;align-items:center;justify-content:center"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#5A5A5A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex:none"><path d="M6 6l12 12M18 6L6 18"/></svg></span></div>
+<div style="padding:6px 28px 22px;display:flex;flex-direction:column;gap:14px"><div><div style="font-size:12.5px;font-weight:600;margin-bottom:6px">Outcome<span style="color:#E3000F"> *</span></div><div style="display:flex;flex-direction:column;gap:8px"><div style="display:flex;gap:10px;padding:10px 12px;border:1px solid #E3000F;background:#FFF5F5"><span style="width:16px;height:16px;border-radius:50%;border:2px solid #E3000F;display:flex;align-items:center;justify-content:center;flex:none;margin-top:2px"><span style="width:8px;height:8px;border-radius:50%;background:#E3000F"></span></span><div><div style="font-size:13.5px;font-weight:600">Answered</div><div style="font-size:12.5px;color:#5A5A5A;margin-top:2px">You replied to the sender.</div></div></div><div style="display:flex;gap:10px;padding:10px 12px;border:1px solid #D6D6D6;background:#fff"><span style="width:16px;height:16px;border-radius:50%;border:2px solid #9A9DA4;display:flex;align-items:center;justify-content:center;flex:none;margin-top:2px"><span style="width:8px;height:8px;border-radius:50%;background:transparent"></span></span><div><div style="font-size:13.5px;font-weight:600">Forwarded</div><div style="font-size:12.5px;color:#5A5A5A;margin-top:2px">Passed to another team or person.</div></div></div><div style="display:flex;gap:10px;padding:10px 12px;border:1px solid #D6D6D6;background:#fff"><span style="width:16px;height:16px;border-radius:50%;border:2px solid #9A9DA4;display:flex;align-items:center;justify-content:center;flex:none;margin-top:2px"><span style="width:8px;height:8px;border-radius:50%;background:transparent"></span></span><div><div style="font-size:13.5px;font-weight:600">No action needed</div><div style="font-size:12.5px;color:#5A5A5A;margin-top:2px">Information only; nothing to do.</div></div></div><div style="display:flex;gap:10px;padding:10px 12px;border:1px solid #D6D6D6;background:#fff"><span style="width:16px;height:16px;border-radius:50%;border:2px solid #9A9DA4;display:flex;align-items:center;justify-content:center;flex:none;margin-top:2px"><span style="width:8px;height:8px;border-radius:50%;background:transparent"></span></span><div><div style="font-size:13.5px;font-weight:600">Duplicate</div><div style="font-size:12.5px;color:#5A5A5A;margin-top:2px">Same request as another mail.</div></div></div><div style="display:flex;gap:10px;padding:10px 12px;border:1px solid #D6D6D6;background:#fff"><span style="width:16px;height:16px;border-radius:50%;border:2px solid #9A9DA4;display:flex;align-items:center;justify-content:center;flex:none;margin-top:2px"><span style="width:8px;height:8px;border-radius:50%;background:transparent"></span></span><div><div style="font-size:13.5px;font-weight:600">Spam</div><div style="font-size:12.5px;color:#5A5A5A;margin-top:2px">Unwanted or unsolicited mail.</div></div></div></div></div><div><div style="font-size:12.5px;font-weight:600;margin-bottom:6px">Note (optional)</div><div style="min-height:64px;border:1px solid #C9CBD0;padding:10px 12px;font-size:13.5px;color:#8A8A8A;line-height:1.5;box-sizing:border-box;background:#fff">Add a short note for the team</div></div></div>
+<div style="display:flex;justify-content:flex-end;gap:10px;padding:16px 28px;background:#F5F6F8;border-top:1px solid #E3E5E9"><a href="Mail.dc.html" style="display:inline-flex;align-items:center;justify-content:center;gap:6px;height:38px;padding:0 12px;font-size:12.5px;font-weight:600;white-space:nowrap;box-sizing:border-box;cursor:pointer;border:1px solid #C9CBD0;background:#fff;color:#1A1A1A;padding:0 20px;font-size:13.5px;">Cancel</a><a href="Agent_D_Acted.dc.html" style="display:inline-flex;align-items:center;justify-content:center;gap:6px;height:38px;padding:0 12px;font-size:12.5px;font-weight:600;white-space:nowrap;box-sizing:border-box;cursor:pointer;border:1px solid #0A6B3D;background:#0A6B3D;color:#fff;padding:0 20px;font-size:13.5px;">Mark as acted</a></div>
+</div><div style="margin-top:14px;font-size:12px;color:#444;background:#fff;border:1px dashed #9A9DA4;padding:6px 10px;max-width:600px;box-sizing:border-box">Result: status becomes Acted · outcome and note are saved · action is written to the audit log · anyone can reopen it later.</div></div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":680,"height":760}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return {};
+  }
+}
+</script>
+</body>
+</html>

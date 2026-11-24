@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>No access</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#F3F3F4;font-family:Inter,system-ui,sans-serif;color:#1A1A1A}
+a{color:inherit;text-decoration:none}
+button,input,textarea,select{font-family:inherit}
+</style>
+</helmet>
+<div style="width:760px;height:400px;box-sizing:border-box;background:#D5D7DC;font-family:Inter,system-ui,sans-serif;color:#1A1A1A;overflow:hidden">
+<div style="padding:40px;display:flex;flex-direction:column;align-items:flex-start;gap:14px;box-sizing:border-box"><div style="width:680px;background:#fff;border:1px solid #C4C7CD;padding:40px;display:flex;flex-direction:column;align-items:flex-start;gap:14px">
+<span style="width:52px;height:52px;background:#ECECEC;display:flex;align-items:center;justify-content:center"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#444" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex:none"><path d="M6 11h12v9H6zM8 11V8a4 4 0 0 1 8 0v3"/></svg></span>
+<div style="font-size:24px;font-weight:300">You do not have access to this mailbox</div>
+<div style="font-size:14px;color:#4A4A4A;line-height:1.6">Mailbox Agent is only open to people who have access to ai@schindler.com. Your role comes from your security group. Ask the Platform Owner to add you to the access group.</div>
+<div style="font-size:12.5px;color:#6B6B6B">Signed in as n.example@schindler.com</div>
+</div><div style="font-size:12px;color:#444;background:#fff;border:1px dashed #9A9DA4;padding:6px 10px;max-width:680px;box-sizing:border-box;line-height:1.55">Doc: only people with access to ai@schindler.com can open the app; checked on every login (SEC-01 to SEC-03). Access removed from the group takes effect within 15 minutes (SEC-02). Wording is sample text.</div></div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":760,"height":400}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return {};
+  }
+}
+</script>
+</body>
+</html>

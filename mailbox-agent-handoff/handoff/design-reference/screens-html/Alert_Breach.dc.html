@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>SLA breach alert</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#F3F3F4;font-family:Inter,system-ui,sans-serif;color:#1A1A1A}
+a{color:inherit;text-decoration:none}
+button,input,textarea,select{font-family:inherit}
+</style>
+</helmet>
+<div style="width:740px;height:520px;box-sizing:border-box;background:#D5D7DC;font-family:Inter,system-ui,sans-serif;color:#1A1A1A;overflow:hidden">
+<div style="padding:40px;display:flex;flex-direction:column;align-items:flex-start;gap:14px;box-sizing:border-box"><div style="width:660px;background:#fff;border:1px solid #C4C7CD;box-shadow:0 8px 28px rgba(0,0,0,.14)">
+<div style="padding:14px 20px;background:#FDE7E9;border-bottom:1px solid #F4C3C8;display:flex;align-items:center;gap:10px"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#A8000B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex:none"><path d="M12 3L2 20h20L12 3zM12 10v4M12 17.2v.01"/></svg><span style="font-size:14px;font-weight:700;color:#8A0009">SLA breach · sent to the Platform Owner right now</span></div>
+<div style="padding:18px 20px;display:flex;flex-direction:column;gap:4px">
+<div style="font-size:12.5px;color:#5A5A5A;margin-bottom:6px">These mails passed the time allowed for their category (sample SLA values):</div>
+<div style="display:flex;gap:12px;align-items:center;padding:12px 0;border-top:1px solid #EEE"><span style="width:32px;height:32px;background:#1A1A1A;color:#fff;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;flex:none">DO</span><div style="flex:1;min-width:0"><div style="font-size:13.5px;font-weight:600">Can we paste customer data into the Work Agent?</div><div style="font-size:12.5px;color:#5A5A5A;margin-top:2px">Daniel Okafor · Data & privacy · In progress · Ravi S.</div></div><span style="font-size:12px;font-weight:700;color:#A8000B;background:#FDE7E9;padding:3px 8px">8 h over</span></div>
+<div style="display:flex;gap:12px;align-items:center;padding:12px 0;border-top:1px solid #EEE"><span style="width:32px;height:32px;background:#1A1A1A;color:#fff;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;flex:none">AR</span><div style="flex:1;min-width:0"><div style="font-size:13.5px;font-weight:600">Work Agent is down for the Finance team</div><div style="font-size:12.5px;color:#5A5A5A;margin-top:2px">Anika Rao · Technical issue · Unassigned</div></div><span style="font-size:12px;font-weight:700;color:#A8000B;background:#FDE7E9;padding:3px 8px">1 h over</span></div>
+<div style="display:flex;gap:8px;margin-top:12px"><a href="Owner_Active.dc.html" style="display:inline-flex;align-items:center;justify-content:center;gap:6px;height:36px;padding:0 12px;font-size:12.5px;font-weight:600;white-space:nowrap;box-sizing:border-box;cursor:pointer;border:1px solid #E3000F;background:#E3000F;color:#fff;padding:0 18px">Open breach list</a><a href="Dlg_Assign.dc.html" style="display:inline-flex;align-items:center;justify-content:center;gap:6px;height:36px;padding:0 12px;font-size:12.5px;font-weight:600;white-space:nowrap;box-sizing:border-box;cursor:pointer;border:1px solid #C9CBD0;background:#fff;color:#1A1A1A;padding:0 18px">Reassign</a></div>
+</div></div><div style="font-size:12px;color:#444;background:#fff;border:1px dashed #9A9DA4;padding:6px 10px;max-width:660px;box-sizing:border-box;line-height:1.55">Doc FR-27 (Should): breach alert for mails unassigned or unanswered beyond the configured time per category. The Owner gets a real-time alert and a daily digest. SLA hours are set per category on the Categories & SLAs screen.</div></div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":740,"height":520}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return {};
+  }
+}
+</script>
+</body>
+</html>

@@ -1,26 +1,283 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+/* Design tokens, taken 1:1 from the approved Mailbox Agent screens. */
+@theme {
+  --font-sans: var(--font-inter), system-ui, sans-serif;
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+  --color-brand: #e3000f;
+  --color-brand-dark: #a8000b;
+  --color-brand-deeper: #8f0009;
+  --color-brand-tint: #fde7e9;
+  --color-brand-tint-soft: #fff5f5;
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --color-ink: #1a1a1a;
+  --color-ink-2: #4a4a4a;
+  --color-ink-3: #5a5a5a;
+  --color-ink-muted: #6b6b6b;
+  --color-ink-faint: #767a82; /* 4.5:1 on white, so placeholders and small grey text meet WCAG AA */
+
+  --color-page: #f3f3f4;
+  --color-card: #ffffff;
+  --color-table-head: #ecedf0;
+  --color-stripe: #f5f6f8;
+  --color-dark: #1a1a1c;
+
+  --color-line: #dcdee3;
+  --color-line-soft: #e3e5e9;
+  --color-line-header: #e4e4e4;
+  --color-line-control: #c9cbd0;
+  --color-line-strong: #c4c7cd;
+
+  --color-status-new-bg: #e6eefc;
+  --color-status-new-fg: #174ea6;
+  --color-status-new-dot: #1d5fd6;
+  --color-status-progress-bg: #fff0d1;
+  --color-status-progress-fg: #7a4a00;
+  --color-status-progress-dot: #c97a00;
+  --color-status-waiting-bg: #efe8fb;
+  --color-status-waiting-fg: #5b34b5;
+  --color-status-waiting-dot: #7a4dd8;
+  --color-status-acted-bg: #e3f4ea;
+  --color-status-acted-fg: #0a6b3d;
+  --color-status-acted-dot: #0e8a4f;
+  --color-status-deleted-bg: #ececec;
+  --color-status-deleted-fg: #555555;
+  --color-status-deleted-dot: #8a8a8a;
+
+  --color-urgency-high-bg: #fde7e9;
+  --color-urgency-high-fg: #a8000b;
+  --color-urgency-high-bar: #e3000f;
+  --color-urgency-medium-bg: #fff0d1;
+  --color-urgency-medium-fg: #7a4a00;
+  --color-urgency-medium-bar: #e39a00;
+  --color-urgency-low-bg: #ececec;
+  --color-urgency-low-fg: #444444;
+  --color-urgency-low-bar: #c9c9c9;
+
+  --color-ok: #0e8a4f;
+  --color-ok-dark: #0a6b3d;
+  --color-ok-bg: #e3f4ea;
+
+  --color-age-1: #bfc5cc;
+  --color-age-2: #f2b24b;
+  --color-age-3: #e3000f;
+  --color-age-4: #8f0009;
+  --color-age-empty: #e6e6e6;
+
+  --container-page: 1440px;
+  --shadow-drawer: -14px 0 40px rgba(0, 0, 0, 0.28);
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--color-page);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  font-size: 14px;
+  /* The approved screens use the browser default line height, not Tailwind's 1.5. */
+  line-height: normal;
+}
+
+/* Column divider and table-head text colours used by the data table. */
+@theme {
+  --color-line-col: #d0d3d9;
+  --color-ink-head: #2b2d31;
+  --color-line-input: #d6d6d6;
+  --color-bar-dark: #1a1a1c;
+  --color-bar-button: #2b2d31;
+  --color-bar-button-line: #4a4c52;
+}
+
+/* Filter dropdowns are <details> elements. No JavaScript needed:
+   the summary is the button, and a transparent layer behind the menu closes it on an outside click. */
+.dropdown > summary {
+  list-style: none;
+  cursor: pointer;
+}
+.dropdown > summary::-webkit-details-marker {
+  display: none;
+}
+.dropdown[open] > summary {
+  position: relative;
+  z-index: 21;
+}
+.dropdown[open] > summary::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  cursor: default;
+}
+.dropdown > form {
+  z-index: 22;
+}
+
+/* "n selected" bulk bar, driven only by which row checkboxes are ticked.
+   The bar sits after the table in the HTML so the counter can read the ticked boxes. */
+.bulk-scope {
+  counter-reset: selected;
+}
+.bulk-scope input[name="mailId"]:checked {
+  counter-increment: selected;
+}
+.bulk-bar {
+  display: none;
+}
+.bulk-scope:has(input[name="mailId"]:checked) .bulk-bar {
+  display: flex;
+}
+.bulk-count::before {
+  content: counter(selected) " selected";
+}
+
+/* Dashboard chart colours, taken from the approved Dashboard screens. */
+@theme {
+  --color-card-line: #e6e6e6;
+  --color-chart-grid: #e6e7ea;
+  --color-chart-track: #f1f2f4;
+  --color-chart-tile: #fafafb;
+  --color-chart-tile-line: #ecedf0;
+  --color-stat-bg: #f7f7f8;
+  --color-line-faint: #f0f0f0;
+  --color-ink-body: #2a2a2a;
+  --color-backlog-1: #f2b6bb;
+  --color-backlog-2: #eb7b84;
+  --color-negative: #c2570a;
+  --color-sla-track: #3a3a3d;
+  --color-sla-fill: #ff4a57;
+  --color-on-dark-muted: #bdbdbd;
+  --color-on-dark-hot: #ff8a92;
+  --color-on-dark-link: #ff6b75;
+}
+
+/* Print / "Save as PDF" (dashboard export): drop the header and toolbar, let the whole page flow. */
+@media print {
+  header,
+  [data-no-print],
+  .dropdown {
+    display: none !important;
+  }
+  .h-screen {
+    height: auto !important;
+    overflow: visible !important;
+  }
+  main {
+    overflow: visible !important;
+  }
+  body {
+    background: #fff;
+  }
+}
+
+/* ---------- Motion: smooth ease-out on everything that opens, closes or changes ---------- */
+:root {
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes drawer-in {
+  from {
+    opacity: 0;
+    transform: translateX(36px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes modal-in {
+  from {
+    opacity: 0;
+    transform: translateY(12px) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes toast-in {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes menu-in {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes content-in {
+  from {
+    opacity: 0;
+    transform: translateY(5px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.animate-fade {
+  animation: fade-in 220ms var(--ease-out) both;
+}
+.animate-drawer {
+  animation: drawer-in 320ms var(--ease-out) both;
+}
+.animate-modal {
+  animation: modal-in 240ms var(--ease-out) both;
+}
+.animate-toast {
+  animation: toast-in 280ms var(--ease-out) both;
+}
+/* Dropdown menus (filters, views, export, user menu) slide in when opened. */
+.dropdown[open] > :not(summary) {
+  animation: menu-in 170ms var(--ease-out) both;
+}
+/* A message in a conversation fades in when expanded. */
+details[data-thread-message][open] > :not(summary) {
+  animation: content-in 240ms var(--ease-out) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Keyboard focus: a clear ring on everything you can tab to (WCAG 2.4.7). */
+:focus-visible {
+  outline: 2px solid var(--color-ink);
+  outline-offset: 2px;
+}
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+  outline-offset: 0;
+}
+main:focus-visible {
+  outline: none;
 }

@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Daily digest</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#F3F3F4;font-family:Inter,system-ui,sans-serif;color:#1A1A1A}
+a{color:inherit;text-decoration:none}
+button,input,textarea,select{font-family:inherit}
+</style>
+</helmet>
+<div style="width:740px;height:820px;box-sizing:border-box;background:#D5D7DC;font-family:Inter,system-ui,sans-serif;color:#1A1A1A;overflow:hidden">
+<div style="padding:40px;display:flex;flex-direction:column;align-items:flex-start;gap:14px;box-sizing:border-box"><div style="width:660px;background:#fff;border:1px solid #C4C7CD;box-shadow:0 8px 28px rgba(0,0,0,.14)">
+<div style="padding:14px 20px;background:#F5F6F8;border-bottom:1px solid #E3E5E9"><div style="font-size:12px;color:#6B6B6B">To: Platform Owner · every morning</div><div style="font-size:16px;font-weight:600;margin-top:2px">Daily summary · ai@schindler.com</div></div>
+<div style="padding:18px 20px;display:flex;flex-direction:column;gap:16px">
+<div style="display:flex;gap:10px"><div style="flex:1;background:#F7F7F8;padding:12px 14px"><div style="font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#6B6B6B">Open backlog</div><div style="font-size:30px;font-weight:300;margin-top:2px;color:#1A1A1A">47</div></div><div style="flex:1;background:#F7F7F8;padding:12px 14px"><div style="font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#6B6B6B">Unassigned</div><div style="font-size:30px;font-weight:300;margin-top:2px;color:#A8000B">12</div></div><div style="flex:1;background:#F7F7F8;padding:12px 14px"><div style="font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#6B6B6B">SLA breaches</div><div style="font-size:30px;font-weight:300;margin-top:2px;color:#A8000B">3</div></div></div>
+<div><div style="font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#6B6B6B;margin-bottom:10px">Mails by category</div><div style="display:flex;flex-direction:column;gap:8px"><div style="display:flex;align-items:center;gap:10px"><span style="width:120px;font-size:13px">Access request</span><div style="flex:1;height:8px;background:#F0F0F0"><div style="width:100%;height:8px;background:#E3000F"></div></div><span style="width:28px;text-align:right;font-size:13px;font-weight:600">74</span></div><div style="display:flex;align-items:center;gap:10px"><span style="width:120px;font-size:13px">Technical issue</span><div style="flex:1;height:8px;background:#F0F0F0"><div style="width:70%;height:8px;background:#E3000F"></div></div><span style="width:28px;text-align:right;font-size:13px;font-weight:600">52</span></div><div style="display:flex;align-items:center;gap:10px"><span style="width:120px;font-size:13px">How-to question</span><div style="flex:1;height:8px;background:#F0F0F0"><div style="width:55%;height:8px;background:#E3000F"></div></div><span style="width:28px;text-align:right;font-size:13px;font-weight:600">41</span></div><div style="display:flex;align-items:center;gap:10px"><span style="width:120px;font-size:13px">New use case</span><div style="flex:1;height:8px;background:#F0F0F0"><div style="width:34%;height:8px;background:#E3000F"></div></div><span style="width:28px;text-align:right;font-size:13px;font-weight:600">25</span></div><div style="display:flex;align-items:center;gap:10px"><span style="width:120px;font-size:13px">Feedback</span><div style="flex:1;height:8px;background:#F0F0F0"><div style="width:28%;height:8px;background:#E3000F"></div></div><span style="width:28px;text-align:right;font-size:13px;font-weight:600">21</span></div></div></div>
+<div><div style="font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#6B6B6B;margin-bottom:6px">Breaches</div><div style="display:flex;gap:12px;align-items:center;padding:12px 0;border-top:1px solid #EEE"><span style="width:32px;height:32px;background:#1A1A1A;color:#fff;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;flex:none">DO</span><div style="flex:1;min-width:0"><div style="font-size:13.5px;font-weight:600">Can we paste customer data into the Work Agent?</div><div style="font-size:12.5px;color:#5A5A5A;margin-top:2px">Data & privacy · Ravi S.</div></div></div></div>
+<div><a href="Dashboard_Owner.dc.html" style="display:inline-flex;align-items:center;justify-content:center;gap:6px;height:36px;padding:0 12px;font-size:12.5px;font-weight:600;white-space:nowrap;box-sizing:border-box;cursor:pointer;border:1px solid #E3000F;background:#E3000F;color:#fff;padding:0 18px">Open dashboard</a></div>
+</div></div><div style="font-size:12px;color:#444;background:#fff;border:1px dashed #9A9DA4;padding:6px 10px;max-width:660px;box-sizing:border-box;line-height:1.55">Doc FR-28 (Could): daily summary to the Owner with counts by category, open backlog and breaches. Numbers are sample data.</div></div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":740,"height":820}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return {};
+  }
+}
+</script>
+</body>
+</html>
