@@ -14,12 +14,20 @@ export type ButtonVariant =
   /** Solid dark red, for destructive confirm buttons ("Delete mail"). */
   | "dangerSolid";
 
+/**
+ * Button weight, strongest first (one solid red button per screen area is the next step):
+ * primary  solid red        the one thing you most likely want to do
+ * outline  red outline      a step that matters, but is not the only one (Take it in a long list)
+ * neutral  white, grey line other choices (Assign, Forward, view)
+ * success  soft green       finishing the mail (Mark as acted)
+ * danger   quiet red text   cannot be undone easily: no border until you point at it, so it is never hit by mistake
+ */
 const VARIANT_STYLES: Record<ButtonVariant, string> = {
-  primary: "border-brand bg-brand text-white",
-  outline: "border-brand bg-card text-brand",
-  neutral: "border-line-control bg-card text-ink",
-  success: "border-ok bg-card text-ok-dark",
-  danger: "border-line-control bg-card text-brand-dark",
+  primary: "border-brand bg-brand text-white hover:border-brand-dark hover:bg-brand-dark",
+  outline: "border-brand bg-card text-brand hover:bg-brand-tint",
+  neutral: "border-line-control bg-card text-ink hover:border-ink-faint hover:bg-stripe",
+  success: "border-[#b4dcc6] bg-ok-bg text-ok-dark hover:border-ok hover:bg-ok hover:text-white",
+  danger: "border-transparent bg-transparent text-brand-dark shadow-none! hover:border-brand hover:bg-brand-tint",
   dark: "h-8 gap-[7px] border-bar-button-line bg-bar-button text-white",
   successSolid: "border-ok-dark bg-ok-dark text-white",
   dangerSolid: "border-brand-dark bg-brand-dark text-white",

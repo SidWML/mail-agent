@@ -1,5 +1,8 @@
 export type SearchParams = Record<string, string | string[] | undefined>;
 
+/** One-time message keys. They belong to one response, so no link or form should carry them on to the next page. */
+const ONE_TIME_KEYS = ["notice", "noticeTone"];
+
 /** Read one value from page searchParams (first value if repeated). */
 export function readParam(params: SearchParams, key: string) {
   const value = params[key];
@@ -21,6 +24,7 @@ export function withParams(
 ) {
   const query = new URLSearchParams();
   for (const key of Object.keys(current)) {
+    if (ONE_TIME_KEYS.includes(key)) continue;
     for (const value of readList(current, key)) query.append(key, value);
   }
   for (const [key, value] of Object.entries(changes)) {
@@ -46,7 +50,7 @@ export function changeUrl(url: string, changes: Record<string, string | number |
 export function getKeptFields(current: SearchParams, dropKeys: string[]) {
   const fields: Array<[string, string]> = [];
   for (const key of Object.keys(current)) {
-    if (dropKeys.includes(key) || key === "page") continue;
+    if (dropKeys.includes(key) || key === "page" || ONE_TIME_KEYS.includes(key)) continue;
     for (const value of readList(current, key)) fields.push([key, value]);
   }
   return fields;

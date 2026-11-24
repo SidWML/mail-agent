@@ -97,7 +97,7 @@ export default function OwnershipBar({ mail, perms, currentUser, links }: Owners
         </div>
       </div>
 
-      <div className="flex flex-wrap items-center gap-2">
+      <div className="flex w-full flex-wrap items-center gap-2">
         {perms.claim && (
           <form action={claimMail}>
             <ActionFields {...fields} />
@@ -114,7 +114,8 @@ export default function OwnershipBar({ mail, perms, currentUser, links }: Owners
             <Icon name="chevronDown" size={12} strokeWidth={2.5} />
           </ButtonLink>
         )}
-        {perms.assignToMe && (
+        {/* "Take it" already does this for an unassigned mail, so it is not offered twice. */}
+        {perms.assignToMe && !perms.claim && (
           <form action={assignMailToMe}>
             <ActionFields {...fields} />
             <Button type="submit" variant="primary" large>
@@ -140,12 +141,6 @@ export default function OwnershipBar({ mail, perms, currentUser, links }: Owners
             Mark as acted
           </ButtonLink>
         )}
-        {perms.del && (
-          <ButtonLink href={links.dialog("delete")} variant="danger" large>
-            <Icon name="trash" size={14} strokeWidth={2.2} />
-            Delete
-          </ButtonLink>
-        )}
         {perms.takeoverRequest && (
           <ButtonLink href={links.dialog("takeover")} variant="neutral" large>
             <Icon name="person" size={14} />
@@ -166,6 +161,13 @@ export default function OwnershipBar({ mail, perms, currentUser, links }: Owners
               Restore
             </Button>
           </form>
+        )}
+        {/* Delete is kept apart on the right, as a quiet button, so it is not hit by mistake. */}
+        {perms.del && (
+          <ButtonLink href={links.dialog("delete")} variant="danger" large className="ml-auto">
+            <Icon name="trash" size={14} strokeWidth={2.2} />
+            Delete
+          </ButtonLink>
         )}
       </div>
     </div>

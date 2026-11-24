@@ -58,7 +58,8 @@ function PrimaryActions({ mail, role, mailHref, getDialogHref, returnTo }: Inbox
   if (perms.assign) {
     return (
       <>
-        <ButtonLink href={getDialogHref("assign")} variant="neutral">
+        {/* Nobody owns it yet: assigning is the next step, so it is the stronger button. Reassigning is a smaller choice. */}
+        <ButtonLink href={getDialogHref("assign")} variant={mail.ownerName ? "neutral" : "outline"}>
           {mail.ownerName ? "Reassign" : "Assign"}
           <Icon name="chevronDown" size={12} strokeWidth={2.5} />
         </ButtonLink>
@@ -68,7 +69,7 @@ function PrimaryActions({ mail, role, mailHref, getDialogHref, returnTo }: Inbox
           </ButtonLink>
         )}
         {perms.del && (
-          <ButtonLink href={getDialogHref("delete")} variant="danger" iconOnly title="Delete">
+          <ButtonLink href={getDialogHref("delete")} variant="danger" iconOnly title="Delete" className="ml-1.5">
             <Icon name="trash" size={15} strokeWidth={2.2} />
           </ButtonLink>
         )}
