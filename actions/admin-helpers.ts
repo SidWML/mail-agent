@@ -1,5 +1,7 @@
 import { redirect } from "next/navigation";
 import { getClosedUrl } from "@/lib/dialog";
+import { MESSAGES } from "@/lib/messages";
+import { encodeNotice } from "@/lib/notice";
 import { changeUrl } from "@/lib/url";
 import { ApiError } from "@/services/http";
 import { finishWithError } from "./action-helpers";
@@ -13,7 +15,7 @@ const FORM_ERROR_CODES = ["NAME_REQUIRED", "SLA_REQUIRED", "REQUIRED", "BAD_INPU
  */
 export function finishWithFormError(error: unknown, returnTo: string, draft: Record<string, string>): never {
   if (error instanceof ApiError && FORM_ERROR_CODES.includes(error.code)) {
-    redirect(changeUrl(returnTo, { ...draft, notice: error.message, noticeTone: "error" }));
+    redirect(changeUrl(returnTo, { ...draft, notice: encodeNotice(MESSAGES.formProblem(error.message)), noticeTone: "error" }));
   }
   return finishWithError(error, getClosedUrl(returnTo));
 }

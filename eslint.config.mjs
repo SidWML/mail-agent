@@ -12,6 +12,8 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // The handoff pack is reference material, not part of this app.
+    "mailbox-agent-handoff/**",
   ]),
 ]);
 

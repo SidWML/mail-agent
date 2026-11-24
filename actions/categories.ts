@@ -2,6 +2,7 @@
 
 import { createCategory, mergeCategories, retireCategory, updateCategory } from "@/services/categories";
 import { runBulkAction } from "@/services/mails";
+import { MESSAGES } from "@/lib/messages";
 import { finishWithNotice, readReturnTo } from "./action-helpers";
 import { getClosedUrl } from "@/lib/dialog";
 import { finishWithFormError } from "./admin-helpers";
@@ -31,7 +32,7 @@ export async function saveCategory(formData: FormData) {
   } catch (error) {
     finishWithFormError(error, returnTo, draft);
   }
-  finishWithNotice(getClosedUrl(returnTo), categoryId ? "Category saved" : "Category added");
+  finishWithNotice(getClosedUrl(returnTo), categoryId ? MESSAGES.categorySaved : MESSAGES.categoryAdded);
 }
 
 export async function mergeCategoryList(formData: FormData) {
@@ -45,7 +46,7 @@ export async function mergeCategoryList(formData: FormData) {
   } catch (error) {
     finishWithFormError(error, returnTo, {});
   }
-  finishWithNotice(getClosedUrl(returnTo), `Categories merged. ${moved} ${moved === 1 ? "mail" : "mails"} moved.`);
+  finishWithNotice(getClosedUrl(returnTo), MESSAGES.categoriesMerged(moved));
 }
 
 export async function retireCategoryById(formData: FormData) {
@@ -60,7 +61,7 @@ export async function retireCategoryById(formData: FormData) {
   }
   finishWithNotice(
     getClosedUrl(returnTo),
-    moved > 0 ? `Category retired. ${moved} ${moved === 1 ? "mail" : "mails"} moved to Needs review.` : "Category retired",
+    MESSAGES.categoryRetired(moved),
   );
 }
 
@@ -84,5 +85,5 @@ export async function approveCategorySuggestion(formData: FormData) {
   } catch (error) {
     finishWithFormError(error, returnTo, {});
   }
-  finishWithNotice(returnTo, `Category “${name}” added${moved > 0 ? ` and ${moved} ${moved === 1 ? "mail" : "mails"} moved into it` : ""}.`);
+  finishWithNotice(returnTo, MESSAGES.suggestionApproved(name, moved));
 }

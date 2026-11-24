@@ -2,9 +2,9 @@ import Icon from "@/components/ui/Icon";
 import type { DashboardFilters } from "./dashboard-filters";
 import PrintButton from "./PrintButton";
 
-/** "Export": the numbers behind every chart as an Excel-ready file, or the page as a PDF through the print dialog (DB-13). */
+/** "Export": the numbers behind every chart as Excel, PDF or CSV, or the page itself through the print dialog (DB-13). */
 export default function ExportMenu({ filters }: { filters: DashboardFilters }) {
-  const query = new URLSearchParams({ days: String(filters.days), format: "csv" });
+  const query = new URLSearchParams({ days: String(filters.days) });
   if (filters.category) query.set("category", filters.category);
   if (filters.assignee) query.set("assignee", filters.assignee);
 
@@ -22,18 +22,32 @@ export default function ExportMenu({ filters }: { filters: DashboardFilters }) {
           <p className="text-[11px] font-bold tracking-[0.08em] text-ink-muted uppercase">Export</p>
           <p className="mt-[3px] text-xs text-ink-muted">Uses the range, category and assignee you chose</p>
         </div>
-        <a href={`/api/dashboard?${query.toString()}`} download className={itemClassName}>
+        <a href={`/api/dashboard?${query.toString()}&format=xlsx`} download className={itemClassName}>
           <Icon name="document" size={15} />
           <span>
-            Excel (CSV)
+            Excel (.xlsx)
             <span className="block text-xs font-normal text-ink-muted">All numbers, one block per chart</span>
+          </span>
+        </a>
+        <a href={`/api/dashboard?${query.toString()}&format=pdf`} download className={itemClassName}>
+          <Icon name="document" size={15} />
+          <span>
+            PDF report
+            <span className="block text-xs font-normal text-ink-muted">Summary and the numbers behind every chart</span>
+          </span>
+        </a>
+        <a href={`/api/dashboard?${query.toString()}&format=csv`} download className={itemClassName}>
+          <Icon name="document" size={15} />
+          <span>
+            CSV
+            <span className="block text-xs font-normal text-ink-muted">Plain data for other tools</span>
           </span>
         </a>
         <PrintButton className={itemClassName}>
           <Icon name="document" size={15} />
           <span>
-            PDF (print this page)
-            <span className="block text-xs font-normal text-ink-muted">Choose “Save as PDF” in the print dialog</span>
+            Print this page
+            <span className="block text-xs font-normal text-ink-muted">The charts as you see them</span>
           </span>
         </PrintButton>
       </div>

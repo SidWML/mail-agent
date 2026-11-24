@@ -3,6 +3,7 @@ import { db, USERS } from '@/server/store';
 import { needsReview, slaBreached, tabMatch, toRow } from '@/server/rules';
 import { category, isOpen } from '@/server/rules';
 import { ApiError } from '@/server/actions';
+import type { Mail } from '@/types/mailbox';
 
 const URG = { High: 3, Medium: 2, Low: 1 } as const;
 
@@ -69,7 +70,7 @@ export const GET = handleRoute('all', async (req, u) => {
   });
 
   const sort = sp.get('sort') || 'newest';
-  const cmp: Record<string, (a: any, b: any) => number> = {
+  const cmp: Record<string, (a: Mail, b: Mail) => number> = {
     newest: (a, b) => +new Date(b.receivedAt) - +new Date(a.receivedAt),
     oldest: (a, b) => +new Date(a.receivedAt) - +new Date(b.receivedAt),
     urgency: (a, b) => URG[b.urgency as 'High'] - URG[a.urgency as 'High'],

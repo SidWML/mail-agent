@@ -3,6 +3,9 @@
 import { cookies, headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { ALERTS_SEEN_COOKIE } from "@/lib/alerts-cookie";
+import { MESSAGES } from "@/lib/messages";
+import { encodeNotice } from "@/lib/notice";
+import { changeUrl } from "@/lib/url";
 import { getAlerts } from "@/services/alerts";
 
 /** "Mark all as read": remember the time of the newest alert this person has now seen, then stay on the same page. */
@@ -15,5 +18,5 @@ export async function markAlertsRead() {
   }
   const referer = (await headers()).get("referer");
   const page = referer ? new URL(referer) : undefined;
-  redirect(page ? page.pathname + page.search : "/inbox");
+  redirect(changeUrl(page ? page.pathname + page.search : "/inbox", { notice: encodeNotice(MESSAGES.alertsRead), noticeTone: "info" }));
 }

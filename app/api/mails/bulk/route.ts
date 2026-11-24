@@ -17,8 +17,8 @@ export const POST = handleRoute('any-staff', async (req, u) => {
       if (!m) throw new ApiError(404, 'NOT_FOUND', 'Mail not found');
       perform(u, m, { type: action, ...payload, version: undefined });
       done.push(id);
-    } catch (e: any) {
-      failed.push({ id, reason: e.message });
+    } catch (e) {
+      failed.push({ id, reason: e instanceof Error ? e.message : 'Could not do this.' });
     }
   }
   return { done, failed };

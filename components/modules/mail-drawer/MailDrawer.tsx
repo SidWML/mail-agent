@@ -30,11 +30,14 @@ interface MailDrawerProps {
   position: DrawerPosition;
   /** The message currently shown translated (asked for with ?translate=), if any. */
   translated?: ({ messageId: string } & MessageTranslation);
+  /** True when the reader chose to show the pictures in mails (?images=1). */
+  showImages: boolean;
 }
 
 /** Right-hand panel (84% wide) with the whole mail. Opened by ?mail=<id>; the list stays visible behind it. */
-export default async function MailDrawer({ detail, currentUser, links, position, translated }: MailDrawerProps) {
+export default async function MailDrawer({ detail, currentUser, links, position, translated, showImages }: MailDrawerProps) {
   const { mail, perms, someoneReplying } = detail;
+  const hasImages = mail.thread.some((message) => message.images?.length);
   const draft = perms.reply ? await readReplyDraft(mail.id) : undefined;
 
   const index = position.mailIds.indexOf(mail.id);
@@ -114,8 +117,12 @@ export default async function MailDrawer({ detail, currentUser, links, position,
                 <div className="flex flex-col gap-3 px-6 py-5">
                   <div className="flex flex-wrap items-center gap-2.5 border border-line-soft bg-stripe px-3.5 py-2 text-[12.5px] text-ink-2">
                     <Icon name="lock" size={14} className="text-ink-3" />
-                    External images are blocked and scripts are removed for safety.
-                    <span className="font-semibold text-brand">Show images</span>
+                    {hasImages && showImages ? "Images from the sender are shown. Scripts are still removed." : "External images are blocked and scripts are removed for safety."}
+                    {hasImages && (
+                      <Link href={showImages ? links.hideImages : links.showImages} className="font-semibold text-brand">
+                        {showImages ? "Hide images" : "Show images"}
+                      </Link>
+                    )}
                   </div>
                   <ThreadChain
                     messages={mail.thread}
@@ -124,6 +131,7 @@ export default async function MailDrawer({ detail, currentUser, links, position,
                     getPreviewHref={links.preview}
                     getTranslateHref={links.translate}
                     showOriginalHref={links.showOriginal}
+                    showImages={showImages}
                     translated={translated}
                   />
                 </div>

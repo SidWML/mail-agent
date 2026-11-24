@@ -205,16 +205,6 @@ html {
     transform: none;
   }
 }
-@keyframes toast-in {
-  from {
-    opacity: 0;
-    transform: translateY(16px);
-  }
-  to {
-    opacity: 1;
-    transform: none;
-  }
-}
 @keyframes menu-in {
   from {
     opacity: 0;
@@ -245,8 +235,158 @@ html {
 .animate-modal {
   animation: modal-in 240ms var(--ease-out) both;
 }
-.animate-toast {
-  animation: toast-in 280ms var(--ease-out) both;
+
+/* ---- Toast (the message after an action) ---- */
+/* It slides in, waits for --toast-ms (the progress bar counts it down), then slides out. Hover pauses it. */
+.toast {
+  animation:
+    toast-in 360ms cubic-bezier(0.2, 0.9, 0.3, 1.15) both,
+    toast-out 260ms var(--ease-out) var(--toast-ms) forwards;
+}
+.toast[data-closed] {
+  animation: toast-out 220ms var(--ease-out) forwards;
+}
+.toast:hover:not([data-closed]),
+.toast:hover:not([data-closed]) .toast-progress {
+  animation-play-state: paused;
+}
+.toast-progress {
+  transform-origin: left;
+  animation: toast-progress var(--toast-ms) linear forwards;
+}
+.toast-icon {
+  animation: icon-pop 420ms 120ms cubic-bezier(0.2, 0.9, 0.3, 1.4) both;
+}
+.toast-error .toast-icon {
+  animation:
+    icon-pop 420ms 120ms cubic-bezier(0.2, 0.9, 0.3, 1.4) both,
+    toast-shake 420ms 460ms ease-in-out;
+}
+.toast-draw {
+  stroke-dasharray: 26;
+  stroke-dashoffset: 26;
+  animation: toast-draw 380ms 300ms ease-out forwards;
+}
+@keyframes toast-in {
+  from {
+    opacity: 0;
+    transform: translateY(-16px) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes toast-out {
+  from {
+    opacity: 1;
+    transform: none;
+  }
+  to {
+    opacity: 0;
+    transform: translateY(-10px) scale(0.98);
+    visibility: hidden;
+  }
+}
+@keyframes toast-progress {
+  from {
+    transform: scaleX(1);
+  }
+  to {
+    transform: scaleX(0);
+  }
+}
+@keyframes icon-pop {
+  from {
+    opacity: 0;
+    transform: scale(0.4);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes toast-draw {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+@keyframes toast-shake {
+  0%,
+  100% {
+    transform: none;
+  }
+  25% {
+    transform: translateX(-3px);
+  }
+  75% {
+    transform: translateX(3px);
+  }
+}
+
+/* ---- A request is on its way ---- */
+/* The bar waits a moment (90 ms) so very fast pages do not flash it. */
+.request-progress {
+  position: fixed;
+  inset: 0 0 auto 0;
+  z-index: 70;
+  height: 3px;
+  overflow: hidden;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 160ms ease-out;
+}
+.request-progress::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: var(--color-brand);
+  transform: translateX(-100%);
+}
+html[data-busy] {
+  cursor: progress;
+}
+html[data-busy] .request-progress {
+  opacity: 1;
+  transition-delay: 90ms;
+}
+html[data-busy] .request-progress::before {
+  animation: request-slide 1.1s ease-in-out infinite;
+}
+@keyframes request-slide {
+  0% {
+    transform: translateX(-100%);
+  }
+  60% {
+    transform: translateX(-12%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+/* The form that was sent cannot be sent twice; the pressed button shows a spinner. */
+form[data-pending] {
+  pointer-events: none;
+}
+button[aria-busy="true"] {
+  opacity: 0.7;
+}
+button[aria-busy="true"]::after {
+  content: "";
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  margin-left: 8px;
+  border: 2px solid currentColor;
+  border-right-color: transparent;
+  border-radius: 50%;
+  vertical-align: -2px;
+  animation: spin 700ms linear infinite;
+}
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
 }
 /* Dropdown menus (filters, views, export, user menu) slide in when opened. */
 .dropdown[open] > :not(summary) {

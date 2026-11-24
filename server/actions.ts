@@ -19,7 +19,21 @@ const need = (ok: boolean, code = 'FORBIDDEN', msg = 'You are not allowed to do 
 export interface ActionBody {
   type: string;
   version?: number;
-  [k: string]: any;
+  approve?: boolean;
+  attachments?: Array<{ name: string; size?: number; kind?: Attachment["kind"] }>;
+  body?: string;
+  categoryId?: string;
+  cc?: string[];
+  next?: string;
+  note?: string;
+  outcome?: string;
+  reason?: string;
+  replyAll?: boolean;
+  requestId?: string;
+  status?: string;
+  text?: string;
+  to?: string[];
+  userId?: string;
 }
 
 function setStatus(u: User, m: Mail, to: Status, detail?: string) {
@@ -72,7 +86,7 @@ export function perform(u: User, m: Mail, body: ActionBody): Mail {
     case 'takeover_request': {
       need(p.takeoverRequest);
       if (!String(body.reason || '').trim()) throw new ApiError(400, 'REASON_REQUIRED', 'Please say why you want to take it over.');
-      m.takeovers.push({ id: nextId('tk'), byId: u.id, byName: u.name, reason: body.reason, at: iso(now()), state: 'open' });
+      m.takeovers.push({ id: nextId('tk'), byId: u.id, byName: u.name, reason: body.reason ?? '', at: iso(now()), state: 'open' });
       logAudit(u, 'Takeover requested', m, undefined, undefined, body.reason);
       break;
     }
@@ -95,7 +109,7 @@ export function perform(u: User, m: Mail, body: ActionBody): Mail {
       const text = String(body.body || '').trim();
       if (!text) throw new ApiError(400, 'EMPTY', 'Write something before sending.');
       if (db().flags.sendFails) throw new ApiError(502, 'SEND_FAILED', 'Microsoft 365 did not accept the reply. Nothing was sent.');
-      const atts: Attachment[] = (body.attachments || []).map((a: any) => ({ id: nextId('att'), name: a.name, size: a.size || 1000, kind: a.kind || 'pdf', scanned: true }));
+      const atts: Attachment[] = (body.attachments || []).map((a) => ({ id: nextId('att'), name: a.name, size: a.size || 1000, kind: a.kind || 'pdf', scanned: true }));
       // Recipients: the sender, anyone added to To, and anyone in Cc. Reply all also keeps the original To and Cc.
       const addresses = (list: unknown) => (Array.isArray(list) ? list.map((x) => String(x).trim()).filter(Boolean) : []);
       const bad = [...addresses(body.to), ...addresses(body.cc)].find((x) => !EMAIL.test(x));
@@ -137,7 +151,7 @@ export function perform(u: User, m: Mail, body: ActionBody): Mail {
     case 'note': {
       need(p.note);
       if (!String(body.text || '').trim()) throw new ApiError(400, 'EMPTY', 'Write a note first.');
-      m.thread.push({ id: nextId('msg'), kind: 'note', author: u.name, authorId: u.id, body: body.text, at: iso(now()), attachments: [] });
+      m.thread.push({ id: nextId('msg'), kind: 'note', author: u.name, authorId: u.id, body: body.text ?? '', at: iso(now()), attachments: [] });
       logAudit(u, 'Internal note', m);
       break;
     }
@@ -163,7 +177,7 @@ export function perform(u: User, m: Mail, body: ActionBody): Mail {
     }
     case 'recategorize': {
       need(p.recategorize);
-      const c = category(body.categoryId);
+      const c = category(body.categoryId ?? '');
       if (!c || !c.active) throw new ApiError(400, 'BAD_CATEGORY', 'Pick an active category.');
       if (!String(body.reason || '').trim()) throw new ApiError(400, 'REASON_REQUIRED', 'A reason is required for a category change.');
       const before = category(m.categoryId)?.name;

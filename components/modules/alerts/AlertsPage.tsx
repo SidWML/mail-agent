@@ -1,10 +1,13 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
+import { sendDigestNow } from "@/actions/digest";
+import ActionFields from "@/components/common/ActionFields";
 import EmptyState from "@/components/common/EmptyState";
 import PageHeader from "@/components/common/PageHeader";
 import AppShell from "@/components/layout/AppShell";
-import { getNotice } from "@/lib/notice";
-import { changeUrl, type SearchParams } from "@/lib/url";
+import Button from "@/components/ui/Button";
+import { encodeNotice, getNotice } from "@/lib/notice";
+import { changeUrl, getCurrentUrl, type SearchParams } from "@/lib/url";
 import { getAlerts } from "@/services/alerts";
 import { getCurrentUser } from "@/services/users";
 import AlertItem from "./AlertItem";
@@ -22,7 +25,7 @@ export default async function AlertsPage({ searchParams: searchParamsPromise }: 
 
   // Viewers get no alerts at all.
   if (currentUser.role === "viewer") {
-    redirect(changeUrl("/inbox", { notice: "Alerts are only for the support team.", noticeTone: "error" }));
+    redirect(changeUrl("/inbox", { notice: encodeNotice({ title: "No alerts for viewers", detail: "Alerts are only for the support team." }), noticeTone: "error" }));
   }
 
   const alerts = await getAlerts();
@@ -32,6 +35,7 @@ export default async function AlertsPage({ searchParams: searchParamsPromise }: 
       <Link href="/inbox" className="shrink-0 text-[13px] font-semibold text-brand">
         &larr; Back to inbox
       </Link>
+      <div className="flex shrink-0 flex-wrap items-end justify-between gap-3">
       <PageHeader
         title="Alerts"
         subtitle={
@@ -40,6 +44,15 @@ export default async function AlertsPage({ searchParams: searchParamsPromise }: 
             : "Messages the system posts to the team channel, newest first."
         }
       />
+      {currentUser.role === "owner" && (
+        <form action={sendDigestNow}>
+          <ActionFields returnTo={getCurrentUrl(ALERTS_PATH, params)} />
+          <Button type="submit" variant="neutral" large>
+            Send daily digest now
+          </Button>
+        </form>
+      )}
+      </div>
 
       {alerts.length === 0 ? (
         <EmptyState icon="check" title="No alerts yet" message="Alerts appear here when a high-urgency mail arrives or an SLA is breached." />

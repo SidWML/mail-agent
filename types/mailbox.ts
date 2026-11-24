@@ -49,6 +49,8 @@ export interface Msg {
   body: string;
   at: string; // ISO
   attachments: Attachment[];
+  /** Pictures inside the mail body. They are blocked until the reader chooses to show them (FR-14). */
+  images?: Array<{ url: string; alt: string }>;
 }
 
 export interface TakeoverRequest {
@@ -130,6 +132,19 @@ export interface Alert {
   title: string;
   body: string;
   mailIds?: string[];
+  /** The numbers of a daily digest (kind 'digest'). */
+  digest?: Digest;
+}
+
+/** The daily summary for the Owner: counts by category, open backlog and SLA breaches (FR-28). */
+export interface Digest {
+  open: number;
+  unassigned: number;
+  breachCount: number;
+  receivedLastDay: number;
+  byCategory: Array<{ name: string; value: number }>;
+  backlog: Array<{ name: string; value: number }>;
+  breaches: Array<{ id: string; subject: string; overByH: number }>;
 }
 
 // What the current user may do with one mail. Computed on the server (lib/rules.ts),

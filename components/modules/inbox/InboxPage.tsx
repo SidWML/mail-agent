@@ -103,7 +103,7 @@ export default async function InboxPage({ searchParams: searchParamsPromise }: I
       <div className="flex shrink-0 flex-wrap items-end justify-between gap-3">
         <PageHeader title={title} subtitle={subtitle} />
         {/* New mail should show up within a minute (FR-01); with a mail open the page checks every 8 seconds for "X is replying" (FR-16). */}
-        <RefreshControl href={getCurrentUrl(INBOX_PATH, params)} syncedAt={mailList.lastSync} autoRefreshSeconds={openMailId ? 8 : 60} />
+        <RefreshControl href={getCurrentUrl(INBOX_PATH, params)} syncedAt={mailList.lastSync} knownCount={mailList.counts.all} autoRefreshSeconds={openMailId ? 8 : 60} />
       </div>
 
       <section className="bulk-scope flex shrink-0 flex-col border border-line-soft bg-card">

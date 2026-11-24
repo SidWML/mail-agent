@@ -43,6 +43,9 @@ export function createDrawerLinks(params: SearchParams) {
     /** Show one message translated (message id + language code). */
     translate: (messageId: string, languageCode: string) => withParams(INBOX_PATH, params, { translate: `${messageId}:${languageCode}` }),
     showOriginal: withParams(INBOX_PATH, params, { translate: undefined }),
+    /** Pictures in mails are blocked until the reader shows them. */
+    showImages: withParams(INBOX_PATH, params, { images: "1" }),
+    hideImages: withParams(INBOX_PATH, params, { images: undefined }),
     preview: (attachmentId: string) => withParams(INBOX_PATH, params, { preview: attachmentId }),
     closePreview: withParams(INBOX_PATH, params, { preview: undefined }),
     /** The address server actions return to. */

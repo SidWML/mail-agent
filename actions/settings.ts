@@ -1,6 +1,8 @@
 "use server";
 
 import { redirect } from "next/navigation";
+import { MESSAGES } from "@/lib/messages";
+import { encodeNotice } from "@/lib/notice";
 import { changeUrl } from "@/lib/url";
 import { ApiError } from "@/services/http";
 import { saveSettings } from "@/services/settings";
@@ -23,9 +25,9 @@ export async function saveAiSettings(formData: FormData) {
     });
   } catch (error) {
     if (error instanceof ApiError && error.status === 400) {
-      redirect(changeUrl(returnTo, { notice: error.message, noticeTone: "error" }));
+      redirect(changeUrl(returnTo, { notice: encodeNotice(MESSAGES.formProblem(error.message)), noticeTone: "error" }));
     }
     throw error;
   }
-  finishWithNotice(returnTo, "Settings saved. The change is in the audit log.");
+  finishWithNotice(returnTo, MESSAGES.settingsSaved);
 }

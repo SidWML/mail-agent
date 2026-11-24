@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import Icon from "@/components/ui/Icon";
 import { cn } from "@/lib/cn";
@@ -24,6 +25,8 @@ interface ThreadMessageProps {
   getTranslateHref: (messageId: string, languageCode: string) => string;
   /** Link that goes back to the original text. */
   showOriginalHref: string;
+  /** True when the reader chose to show pictures. Otherwise they are blocked. */
+  showImages: boolean;
   /** Set when this message is currently shown translated. */
   translation?: MessageTranslation;
 }
@@ -38,6 +41,7 @@ export default function ThreadMessage({
   getPreviewHref,
   getTranslateHref,
   showOriginalHref,
+  showImages,
   translation,
 }: ThreadMessageProps) {
   const isNote = message.kind === "note";
@@ -130,6 +134,21 @@ export default function ThreadMessage({
             </p>
           ))}
         </div>
+
+        {message.images && message.images.length > 0 && (
+          <div className="mt-3 flex flex-wrap gap-3">
+            {message.images.map((image) =>
+              showImages ? (
+                <Image key={image.url} src={image.url} alt={image.alt} width={280} height={130} unoptimized className="animate-fade border border-line-soft" />
+              ) : (
+                <div key={image.url} className="flex h-[130px] w-[280px] flex-col items-center justify-center gap-1.5 border border-dashed border-line-control bg-stripe text-xs text-ink-3">
+                  <Icon name="lock" size={16} />
+                  Image blocked
+                </div>
+              ),
+            )}
+          </div>
+        )}
 
         <AttachmentList mailId={mailId} attachments={message.attachments} getPreviewHref={getPreviewHref} />
       </div>

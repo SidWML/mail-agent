@@ -1,5 +1,5 @@
 import { handleRoute } from '@/server/handle-route';
-import { dashboardCsvResponse } from '@/server/dashboard-csv';
+import { dashboardExportResponse, type ExportFormat } from '@/server/dashboard-export';
 import { db, now, USERS } from '@/server/store';
 import { category, isOpen, needsReview, slaBreached } from '@/server/rules';
 import type { Mail } from '@/types/mailbox';
@@ -123,6 +123,7 @@ export const GET = handleRoute('all', async (req) => {
     topSenders: top(cur, (m) => m.sender), topBusinessUnits: top(cur, (m) => m.entities.businessUnit), topCountries: top(cur, (m) => m.entities.country),
     topics, ai, narrative, sentimentTrend,
   };
-  if (sp.get('format') === 'csv') return dashboardCsvResponse(result, days); // DB-13
+  const format = sp.get('format');
+  if (format === 'csv' || format === 'xlsx' || format === 'pdf') return dashboardExportResponse(result, days, format as ExportFormat); // DB-13
   return result;
 });

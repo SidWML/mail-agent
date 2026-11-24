@@ -1,4 +1,6 @@
 import { redirect } from "next/navigation";
+import { MESSAGES, type Message } from "@/lib/messages";
+import { encodeNotice, type NoticeTone } from "@/lib/notice";
 import { changeUrl } from "@/lib/url";
 import { ApiError } from "@/services/http";
 
@@ -9,7 +11,7 @@ export function readReturnTo(formData: FormData, fallback = "/inbox") {
 }
 
 /** Go back to the page, close any dialog, and show a one-time notice. */
-export function finishWithNotice(returnTo: string, message: string, tone: "success" | "error" = "success"): never {
+export function finishWithNotice(returnTo: string, message: Message, tone: NoticeTone = "success"): never {
   redirect(
     changeUrl(returnTo, {
       // Close any dialog and forget what it was about.
@@ -23,8 +25,8 @@ export function finishWithNotice(returnTo: string, message: string, tone: "succe
       tplq: undefined,
       assignTeam: undefined,
       outcome: undefined,
-      notice: message,
-      noticeTone: tone === "error" ? "error" : undefined,
+      notice: encodeNotice(message),
+      noticeTone: tone === "success" ? undefined : tone,
     }),
   );
 }
@@ -45,12 +47,12 @@ export function finishWithError(error: unknown, returnTo: string): never {
     case "RESTORE_EXPIRED":
       redirect(changeUrl(returnTo, { dialog: "restore-expired" }));
     case "STALE":
-      return finishWithNotice(returnTo, "Someone changed this mail. It has been refreshed.", "error");
+      return finishWithNotice(returnTo, MESSAGES.changedByOthers, "error");
     case "NO_MAILBOX_ACCESS":
       redirect("/access-denied");
     default:
       // A mistake in the form (missing reason, bad address...): show the message and keep the dialog open.
-      if (error.status === 400) redirect(changeUrl(returnTo, { notice: error.message, noticeTone: "error" }));
-      return finishWithNotice(returnTo, error.message, "error");
+      if (error.status === 400) redirect(changeUrl(returnTo, { notice: encodeNotice(MESSAGES.formProblem(error.message)), noticeTone: "error" }));
+      return finishWithNotice(returnTo, MESSAGES.failed(error.message), "error");
   }
 }

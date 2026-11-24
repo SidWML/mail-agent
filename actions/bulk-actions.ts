@@ -2,6 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
+import { MESSAGES } from "@/lib/messages";
 import { changeUrl } from "@/lib/url";
 import { runBulkAction } from "@/services/mails";
 import { finishWithError, finishWithNotice, readReturnTo } from "./action-helpers";
@@ -20,8 +21,8 @@ export async function startBulkAction(bulkAction: string, formData: FormData) {
   const returnTo = readReturnTo(formData);
   const mailIds = formData.getAll("mailId").map(String);
 
-  if (mailIds.length === 0) finishWithNotice(returnTo, "Tick at least one mail first.", "error");
-  if (mailIds.length > 100) finishWithNotice(returnTo, "You can change up to 100 mails at once.", "error");
+  if (mailIds.length === 0) finishWithNotice(returnTo, MESSAGES.tickOneMail, "error");
+  if (mailIds.length > 100) finishWithNotice(returnTo, MESSAGES.tooManyMails, "error");
 
   redirect(changeUrl(returnTo, { dialog: `bulk-${bulkAction}`, ids: mailIds.join(",") }));
 }
@@ -50,12 +51,10 @@ export async function confirmBulkAction(formData: FormData) {
 
   revalidatePath("/inbox");
   const label = BULK_LABELS[action] ?? "updated";
-  const skipped = result.failed.length
-    ? ` ${result.failed.length} skipped: ${[...new Set(result.failed.map((item) => item.reason))].join("; ")}`
-    : "";
+  const reasons = [...new Set(result.failed.map((item) => item.reason))];
   finishWithNotice(
     changeUrl(returnTo, { ids: undefined }),
-    `${result.done.length} ${result.done.length === 1 ? "mail" : "mails"} ${label}.${skipped}`,
+    result.done.length === 0 ? MESSAGES.bulkNothingDone(reasons) : MESSAGES.bulkDone(result.done.length, label, reasons, result.failed.length),
     result.done.length === 0 ? "error" : "success",
   );
 }

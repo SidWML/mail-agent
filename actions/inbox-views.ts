@@ -4,6 +4,9 @@ import { redirect } from "next/navigation";
 import { changeUrl } from "@/lib/url";
 import { saveSortPreference } from "@/services/preferences";
 import { deleteSavedView, saveView } from "@/services/views";
+import { SORT_OPTIONS } from "@/components/modules/inbox/inbox-filters";
+import { MESSAGES } from "@/lib/messages";
+import { encodeNotice } from "@/lib/notice";
 import { finishWithError, finishWithNotice, readReturnTo } from "./action-helpers";
 
 /** Address keys that describe the open mail or one-time messages, not the list itself. */
@@ -21,13 +24,13 @@ export async function saveCurrentView(formData: FormData) {
   } catch (error) {
     finishWithError(error, returnTo);
   }
-  finishWithNotice(returnTo, `View “${name}” saved.`);
+  finishWithNotice(returnTo, MESSAGES.viewSaved(name));
 }
 
 export async function removeSavedView(formData: FormData) {
   const returnTo = readReturnTo(formData);
   await deleteSavedView(String(formData.get("viewId") ?? ""));
-  finishWithNotice(returnTo, "View removed.");
+  finishWithNotice(returnTo, MESSAGES.viewRemoved);
 }
 
 /**
@@ -44,5 +47,6 @@ export async function applySort(formData: FormData) {
     query.append(key, value);
   }
   query.set("sort", sort);
-  redirect(changeUrl(`/inbox?${query.toString()}`, { page: undefined }));
+  const label = SORT_OPTIONS.find((option) => option.value === sort)?.short ?? "your choice";
+  redirect(changeUrl(`/inbox?${query.toString()}`, { page: undefined, notice: encodeNotice(MESSAGES.sorted(label)), noticeTone: "info" }));
 }

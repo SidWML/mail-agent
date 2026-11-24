@@ -1,7 +1,7 @@
 import { redirect } from "next/navigation";
 import PageHeader from "@/components/common/PageHeader";
 import AppShell from "@/components/layout/AppShell";
-import { getNotice } from "@/lib/notice";
+import { encodeNotice, getNotice } from "@/lib/notice";
 import { changeUrl, getCurrentUrl, type SearchParams } from "@/lib/url";
 import { getSettings } from "@/services/settings";
 import { getCurrentUser } from "@/services/users";
@@ -20,7 +20,7 @@ export default async function SettingsPage({ searchParams: searchParamsPromise }
   const currentUser = await getCurrentUser();
 
   if (currentUser.role !== "owner") {
-    redirect(changeUrl("/inbox", { notice: "Only the Platform Owner can open the AI settings.", noticeTone: "error" }));
+    redirect(changeUrl("/inbox", { notice: encodeNotice({ title: "Owner only", detail: "Only the Platform Owner can open the AI settings." }), noticeTone: "error" }));
   }
 
   const { settings, usage } = await getSettings();

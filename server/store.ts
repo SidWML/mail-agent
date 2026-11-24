@@ -124,7 +124,6 @@ const FILES: Array<[string, Attachment['kind'], number]> = [['Users-list.xlsx', 
 
 function seed(): DB {
   const r = rng(42);
-  const pick = <T,>(a: T[]) => a[Math.floor(r() * a.length)];
   const t0 = Date.now();
   const H = 3600_000;
   const mails: Mail[] = [];
@@ -154,6 +153,7 @@ function seed(): DB {
     m.thread.push({
       id: nid('msg'), kind: 'in', author: name, to: ['ai@schindler.com'], cc: r() < 0.45 ? pickCc() : [],
       body: `Hello AI team,\n\n${s.summary} Could you please help?\n\nThank you,\n${name}`, at: receivedAt, attachments: atts,
+      images: s.cat === 'c-tech' && i % 2 === 0 ? [{ url: '/demo-images/error-screenshot.svg', alt: 'Screenshot of the error message' }] : undefined,
     });
     return m;
   };

@@ -44,6 +44,7 @@ export default async function MailOverlay({ params, currentUser, position }: Mai
           currentUser={currentUser}
           links={links}
           position={position}
+          showImages={readParam(params, "images") === "1"}
           translated={translation ? { messageId: translateMessageId, ...translation } : undefined}
         />}
 

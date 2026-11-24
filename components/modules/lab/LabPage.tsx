@@ -1,5 +1,4 @@
 import Link from "next/link";
-import { notFound } from "next/navigation";
 import PageHeader from "@/components/common/PageHeader";
 import AppShell from "@/components/layout/AppShell";
 import { LAB_GROUPS, RESET_SCENARIO } from "@/lib/lab-scenarios";
@@ -16,10 +15,8 @@ interface LabPageProps {
 
 const LAB_PATH = "/lab";
 
-/** Developer-only page: play the situations from the requirements against the dummy API. */
+/** Demo page: play the situations from the requirements against the dummy API. */
 export default async function LabPage({ searchParams: searchParamsPromise }: LabPageProps) {
-  if (process.env.NODE_ENV === "production") notFound();
-
   const params = await searchParamsPromise;
   const state = await getLabState();
 

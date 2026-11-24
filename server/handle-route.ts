@@ -8,7 +8,7 @@ const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 /** Wrap a route handler: identify the user, check the role, add fake latency, format errors. */
 export function handleRoute(
   roles: Role[] | 'any-staff' | 'all',
-  fn: (req: NextRequest, u: User, ctx: any) => Promise<any> | any,
+  fn: (req: NextRequest, u: User, ctx: { params: Record<string, string> }) => unknown,
 ) {
   return async (req: NextRequest, rawContext: { params: Promise<Record<string, string>> }) => {
     try {
@@ -24,8 +24,8 @@ export function handleRoute(
       // Next 16: route params arrive as a Promise. Resolve once here so handlers read ctx.params.id directly.
       const ctx = { params: await rawContext.params };
       const out = await fn(req, u, ctx);
-      return out instanceof NextResponse ? out : NextResponse.json(out);
-    } catch (e: any) {
+      return out instanceof NextResponse ? out : NextResponse.json(out as object);
+    } catch (e) {
       if (e instanceof ApiError) {
         return NextResponse.json({ error: { code: e.code, message: e.message, ...(e.extra || {}) } }, { status: e.status });
       }

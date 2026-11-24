@@ -1,9 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { addAlert, createIncoming, db, iso, logAudit, now, reset, SYSTEM, userById } from '@/server/store';
 import { ApiError, perform } from '@/server/actions';
-import { category, isOpen, slaBreached, toRow } from '@/server/rules';
+import { sendDigest } from '@/server/digest';
+import { category, slaBreached } from '@/server/rules';
 
-const alerted = (globalThis as any).__breachAlerted ?? ((globalThis as any).__breachAlerted = new Set<string>());
+const alerted = ((globalThis as { __breachAlerted?: Set<string> }).__breachAlerted ??= new Set<string>());
 
 function checkSla() {
   const d = db();
@@ -55,11 +56,11 @@ export async function POST(req: NextRequest) {
       case 'advance': {
         d.offsetMs += (Number(b.hours) || 24) * 3600_000;
         const n = checkSla();
-        if ((Number(b.hours) || 24) >= 24) addAlert({ kind: 'digest', channel: 'Email to Owner', title: 'Daily summary', body: `Open ${d.mails.filter(isOpen).length} · Unassigned ${d.mails.filter((m) => isOpen(m) && !m.ownerId).length} · SLA breaches ${d.mails.filter(slaBreached).length}` });
+        if ((Number(b.hours) || 24) >= 24) sendDigest();
         return NextResponse.json({ ok: true, message: `Clock moved ${b.hours || 24} h. ${n} new SLA breach alert(s).` });
       }
       case 'digest': {
-        addAlert({ kind: 'digest', channel: 'Email to Owner', title: 'Daily summary', body: `Open ${d.mails.filter(isOpen).length} · Unassigned ${d.mails.filter((m) => isOpen(m) && !m.ownerId).length} · SLA breaches ${d.mails.filter(slaBreached).length}` });
+        sendDigest();
         return NextResponse.json({ ok: true, message: 'Daily digest sent to the Owner.' });
       }
       case 'presence': {
@@ -81,7 +82,7 @@ export async function POST(req: NextRequest) {
         return NextResponse.json({ flags: d.flags, offsetHours: d.offsetMs / 3600_000, unassignedNew: d.mails.filter((x) => x.status === 'New' && !x.ownerId).length });
     }
     throw new ApiError(400, 'UNKNOWN', 'Unknown scenario.');
-  } catch (e: any) {
+  } catch (e) {
     if (e instanceof ApiError) return NextResponse.json({ error: { code: e.code, message: e.message } }, { status: e.status });
     console.error(e);
     return NextResponse.json({ error: { code: 'SERVER', message: 'Something went wrong.' } }, { status: 500 });

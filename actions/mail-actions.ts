@@ -2,6 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
+import { MESSAGES, type Message } from "@/lib/messages";
 import { changeUrl } from "@/lib/url";
 import { getUsers } from "@/services/users";
 import { runMailAction } from "@/services/mails";
@@ -16,7 +17,7 @@ const field = (formData: FormData, name: string) => String(formData.get(name) ??
  * Runs one mail action, then goes back to the page with a short result message.
  * Errors become the right dialog or notice (see finishWithError).
  */
-async function runAndFinish(formData: FormData, action: MailAction, successMessage: string) {
+async function runAndFinish(formData: FormData, action: MailAction, successMessage: Message) {
   const mailId = field(formData, "mailId");
   const returnTo = readReturnTo(formData);
   const version = formData.get("version");
@@ -33,7 +34,7 @@ async function runAndFinish(formData: FormData, action: MailAction, successMessa
 
 /** "Take it": the signed-in person becomes the owner of an unassigned mail. */
 export async function claimMail(formData: FormData) {
-  await runAndFinish(formData, { type: "claim" }, "You took this mail. Replying is now open to you.");
+  await runAndFinish(formData, { type: "claim" }, MESSAGES.mailTaken);
 }
 
 /** Platform Owner: give the mail to a team member (also used to reassign). */
@@ -41,19 +42,19 @@ export async function assignMail(formData: FormData) {
   const userId = field(formData, "userId");
   const users = await getUsers();
   const name = users.find((user) => user.id === userId)?.name ?? "the team member";
-  await runAndFinish(formData, { type: "assign", userId }, `Mail assigned to ${name}.`);
+  await runAndFinish(formData, { type: "assign", userId }, MESSAGES.assigned(name));
 }
 
 /** Platform Owner: take over someone else's mail. */
 export async function assignMailToMe(formData: FormData) {
-  await runAndFinish(formData, { type: "assign_to_me" }, "Assigned to you. You can reply now.");
+  await runAndFinish(formData, { type: "assign_to_me" }, MESSAGES.assignedToYou);
 }
 
 export async function requestTakeover(formData: FormData) {
   await runAndFinish(
     formData,
     { type: "takeover_request", reason: field(formData, "reason") },
-    "Takeover request sent to the owner.",
+    MESSAGES.takeoverSent,
   );
 }
 
@@ -63,7 +64,7 @@ export async function decideTakeover(formData: FormData) {
   await runAndFinish(
     formData,
     { type: "takeover_decide", requestId: field(formData, "requestId"), approve },
-    approve ? "Takeover approved. The mail has a new owner." : "Takeover declined. You stay the owner.",
+    approve ? MESSAGES.takeoverApproved : MESSAGES.takeoverDeclined,
   );
 }
 
@@ -71,7 +72,7 @@ export async function markActed(formData: FormData) {
   await runAndFinish(
     formData,
     { type: "acted", outcome: field(formData, "outcome"), note: field(formData, "note") },
-    "Mail marked as acted. It moved to Acted / Closed.",
+    MESSAGES.markedActed,
   );
 }
 
@@ -95,26 +96,26 @@ export async function changeCategory(formData: FormData) {
   await runAndFinish(
     formData,
     { type: "recategorize", categoryId: field(formData, "categoryId"), reason: field(formData, "reason") },
-    "Category changed. The reason is in the audit log.",
+    MESSAGES.categoryChanged,
   );
 }
 
 export async function blockSender(formData: FormData) {
-  await runAndFinish(formData, { type: "block" }, "Sender blocked. The mail was marked as acted (Spam).");
+  await runAndFinish(formData, { type: "block" }, MESSAGES.senderBlocked);
 }
 
 export async function deleteMail(formData: FormData) {
-  await runAndFinish(formData, { type: "delete" }, "Mail deleted. You can restore it for 30 days.");
+  await runAndFinish(formData, { type: "delete" }, MESSAGES.mailDeleted);
 }
 
 export async function restoreMail(formData: FormData) {
-  await runAndFinish(formData, { type: "restore" }, "Mail restored.");
+  await runAndFinish(formData, { type: "restore" }, MESSAGES.mailRestored);
 }
 
 export async function reopenMail(formData: FormData) {
-  await runAndFinish(formData, { type: "reopen" }, "Mail reopened. It is back In progress.");
+  await runAndFinish(formData, { type: "reopen" }, MESSAGES.mailReopened);
 }
 
 export async function addInternalNote(formData: FormData) {
-  await runAndFinish(formData, { type: "note", text: field(formData, "text") || field(formData, "body") }, "Internal note added.");
+  await runAndFinish(formData, { type: "note", text: field(formData, "text") || field(formData, "body") }, MESSAGES.noteAdded);
 }

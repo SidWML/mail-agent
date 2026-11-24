@@ -1,8 +1,10 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
 import NoticeToast from "@/components/common/NoticeToast";
+import RequestProgress from "@/components/common/RequestProgress";
 import Icon from "@/components/ui/Icon";
 import { cn } from "@/lib/cn";
+import { createRenderKey } from "@/lib/render-key";
 import type { Notice } from "@/lib/notice";
 import { NAV_ITEMS } from "@/lib/navigation";
 import { getCurrentUser, getUsers } from "@/services/users";
@@ -27,6 +29,7 @@ interface AppShellProps {
  */
 export default async function AppShell({ activePath, banner, notice, overlay, children }: AppShellProps) {
   const [currentUser, allUsers] = await Promise.all([getCurrentUser(), getUsers()]);
+  const renderKey = createRenderKey();
   const visibleNavItems = NAV_ITEMS.filter((item) => item.roles.includes(currentUser.role));
 
   return (
@@ -83,7 +86,8 @@ export default async function AppShell({ activePath, banner, notice, overlay, ch
       <main id="main-content" tabIndex={-1} className="animate-fade flex min-h-0 flex-1 flex-col gap-4 overflow-y-auto px-6 pt-5 pb-4">{children}</main>
 
       {overlay}
-      {notice && <NoticeToast notice={notice} />}
+      {notice && <NoticeToast key={renderKey} notice={notice} />}
+      <RequestProgress key={renderKey} />
     </div>
   );
 }

@@ -14,6 +14,8 @@ import {
   type DraftAttachment,
   type ReplyDraft,
 } from "@/services/reply-draft";
+import { MESSAGES, type Message } from "@/lib/messages";
+import { encodeNotice } from "@/lib/notice";
 import { finishWithError, finishWithNotice, readReturnTo } from "./action-helpers";
 
 const field = (formData: FormData, name: string) => String(formData.get(name) ?? "");
@@ -50,23 +52,30 @@ export async function updateReplyDraft(formData: FormData) {
   const returnTo = readReturnTo(formData);
   const intent = field(formData, "intent");
   const draft = await readDraftFromForm(formData);
+  const recipientsBefore = draft.to.length + draft.cc.length;
   const invalidAddresses = addTypedRecipients(draft, formData);
+  const recipientsAdded = draft.to.length + draft.cc.length - recipientsBefore;
+  let message: Message | undefined = recipientsAdded > 0 ? MESSAGES.recipientsAdded(recipientsAdded) : undefined;
 
   if (intent.startsWith("mode:")) {
     draft.mode = intent.slice(5) as ComposeMode;
   } else if (intent.startsWith("remove-to:")) {
     draft.to = draft.to.filter((_, index) => index !== Number(intent.slice(10)));
+    message = MESSAGES.recipientRemoved;
   } else if (intent.startsWith("remove-cc:")) {
     draft.cc = draft.cc.filter((_, index) => index !== Number(intent.slice(10)));
+    message = MESSAGES.recipientRemoved;
   } else if (intent === "toggle-quoted") {
     draft.hideQuoted = !draft.hideQuoted;
   } else if (intent.startsWith("remove-attachment:")) {
     draft.attachments = draft.attachments.filter((_, index) => index !== Number(intent.slice(18)));
+    message = MESSAGES.attachmentRemoved;
   } else if (intent === "ai-draft") {
     try {
       const result = await getAiDraft(mailId);
       draft.body = result.draft;
       draft.fromAi = true;
+      message = MESSAGES.aiDraftReady;
     } catch (error) {
       await saveReplyDraft(mailId, draft);
       finishWithError(error, returnTo);
@@ -75,10 +84,11 @@ export async function updateReplyDraft(formData: FormData) {
 
   await saveReplyDraft(mailId, draft);
   if (invalidAddresses.length > 0) {
-    finishWithNotice(returnTo, `Not an email address: ${invalidAddresses.join(", ")}`, "error");
+    finishWithNotice(returnTo, MESSAGES.notAnEmail(invalidAddresses), "error");
   }
   if (intent === "dialog:attach") redirect(changeUrl(returnTo, { dialog: "attach" }));
   if (intent === "dialog:template") redirect(changeUrl(returnTo, { dialog: "template" }));
+  if (message) finishWithNotice(returnTo, message);
   redirect(changeUrl(returnTo, { dialog: undefined }));
 }
 
@@ -91,7 +101,7 @@ export async function insertTemplate(formData: FormData) {
 
   // Enter in the search box: show the matching templates instead of inserting.
   if (field(formData, "intent") !== "insert") redirect(changeUrl(returnTo, { dialog: "template", tplq: searchText }));
-  if (!templateId) finishWithNotice(changeUrl(returnTo, { dialog: "template" }), "Pick a template first.", "error");
+  if (!templateId) finishWithNotice(changeUrl(returnTo, { dialog: "template" }), MESSAGES.templateNeeded, "error");
 
   const templates = await getReplyTemplates();
   const template = templates.find((item) => item.id === templateId);
@@ -105,7 +115,7 @@ export async function insertTemplate(formData: FormData) {
     draft.fromAi = false;
     await saveReplyDraft(mailId, draft);
   }
-  redirect(changeUrl(returnTo, { dialog: undefined, tplq: undefined }));
+  finishWithNotice(returnTo, template ? MESSAGES.templateInserted(template.name) : MESSAGES.templateNeeded, template ? "success" : "error");
 }
 
 // Files the composer accepts. Sizes and types are samples (the doc leaves them open).
@@ -129,6 +139,7 @@ export async function attachFiles(formData: FormData) {
   const mailId = field(formData, "mailId");
   const returnTo = readReturnTo(formData);
   const draft = await readReplyDraft(mailId);
+  const attachmentsBefore = draft.attachments.length;
   const rejected: string[] = [];
 
   for (const entry of formData.getAll("files")) {
@@ -141,8 +152,19 @@ export async function attachFiles(formData: FormData) {
   }
   await saveReplyDraft(mailId, draft);
 
-  if (rejected.length > 0) redirect(changeUrl(returnTo, { dialog: "attach", rejected: rejected.join(";;") }));
-  redirect(changeUrl(returnTo, { dialog: undefined, rejected: undefined }));
+  const added = draft.attachments.length - attachmentsBefore;
+  if (rejected.length > 0) {
+    redirect(
+      changeUrl(returnTo, {
+        dialog: "attach",
+        rejected: rejected.join(";;"),
+        notice: encodeNotice(added > 0 ? MESSAGES.filesAttached(added) : MESSAGES.filesNotAttached),
+        noticeTone: added > 0 ? undefined : "error",
+      }),
+    );
+  }
+  if (added === 0) finishWithNotice(returnTo, MESSAGES.filesNotAttached, "error");
+  finishWithNotice(returnTo, MESSAGES.filesAttached(added));
 }
 
 /** Send the reply from ai@schindler.com. On success the next-status step opens; on failure the text stays. */
@@ -153,7 +175,7 @@ export async function sendReply(formData: FormData) {
   const invalidAddresses = addTypedRecipients(draft, formData);
   if (invalidAddresses.length > 0) {
     await saveReplyDraft(mailId, draft);
-    finishWithNotice(returnTo, `Not an email address: ${invalidAddresses.join(", ")}`, "error");
+    finishWithNotice(returnTo, MESSAGES.notAnEmail(invalidAddresses), "error");
   }
 
   try {
@@ -196,14 +218,14 @@ export async function chooseNextStatus(formData: FormData) {
       finishWithError(error, returnTo);
     }
     revalidatePath("/inbox");
-    finishWithNotice(returnTo, "Reply sent. The mail stays In progress.");
+    finishWithNotice(returnTo, MESSAGES.replySentStaysOpen);
   }
 
-  finishWithNotice(returnTo, "Reply sent. Waiting on the sender.");
+  finishWithNotice(returnTo, MESSAGES.replySentWaiting);
 }
 
 /** Throw away the typed reply. */
 export async function discardReplyDraft(formData: FormData) {
   await clearReplyDraft(field(formData, "mailId"));
-  redirect(changeUrl(readReturnTo(formData), { dialog: undefined }));
+  finishWithNotice(readReturnTo(formData), MESSAGES.draftDiscarded, "info");
 }

@@ -1,6 +1,7 @@
 "use server";
 
 import { createTemplate, deleteTemplate, updateTemplate } from "@/services/templates";
+import { MESSAGES } from "@/lib/messages";
 import { finishWithNotice, readReturnTo } from "./action-helpers";
 import { getClosedUrl } from "@/lib/dialog";
 import { finishWithFormError } from "./admin-helpers";
@@ -22,7 +23,7 @@ export async function saveTemplate(formData: FormData) {
   } catch (error) {
     finishWithFormError(error, returnTo, draft);
   }
-  finishWithNotice(getClosedUrl(returnTo), templateId ? "Template saved" : "Template added");
+  finishWithNotice(getClosedUrl(returnTo), templateId ? MESSAGES.templateSaved : MESSAGES.templateAdded);
 }
 
 export async function deleteTemplateById(formData: FormData) {
@@ -32,5 +33,5 @@ export async function deleteTemplateById(formData: FormData) {
   } catch (error) {
     finishWithFormError(error, returnTo, {});
   }
-  finishWithNotice(getClosedUrl(returnTo), "Template deleted");
+  finishWithNotice(getClosedUrl(returnTo), MESSAGES.templateDeleted);
 }

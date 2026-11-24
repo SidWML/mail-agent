@@ -13,6 +13,8 @@ interface ThreadChainProps {
   getPreviewHref: (attachmentId: string) => string;
   getTranslateHref: (messageId: string, languageCode: string) => string;
   showOriginalHref: string;
+  /** True when the reader chose to show the pictures in mails. */
+  showImages: boolean;
   /** The message that is currently shown translated, and its translation. */
   translated?: { messageId: string } & MessageTranslation;
 }
@@ -48,7 +50,7 @@ const preview = (body: string) => body.replace(/\s+/g, " ").replace(/^(Hello|Hi)
  * The whole conversation of one ticket, oldest first. Long chains stay readable:
  * the latest messages are open, older ones fold to one line you can open with a click.
  */
-export default function ThreadChain({ messages, mailId, senderEmail, getPreviewHref, getTranslateHref, showOriginalHref, translated }: ThreadChainProps) {
+export default function ThreadChain({ messages, mailId, senderEmail, getPreviewHref, getTranslateHref, showOriginalHref, showImages, translated }: ThreadChainProps) {
   const conversationCount = messages.filter((message) => message.kind !== "note").length;
   const participants = getParticipants(messages, senderEmail);
   const firstOpenIndex = messages.length <= 3 ? 0 : messages.length - OPEN_LATEST;
@@ -110,6 +112,7 @@ export default function ThreadChain({ messages, mailId, senderEmail, getPreviewH
             getPreviewHref={getPreviewHref}
             getTranslateHref={getTranslateHref}
             showOriginalHref={showOriginalHref}
+            showImages={showImages}
             translation={translated?.messageId === message.id ? translated : undefined}
           />
         </details>
