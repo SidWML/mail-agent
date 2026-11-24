@@ -86,8 +86,8 @@ export default async function AppShell({ activePath, banner, notice, overlay, ch
       <main id="main-content" tabIndex={-1} className="animate-fade flex min-h-0 flex-1 flex-col gap-4 overflow-y-auto px-6 pt-5 pb-4">{children}</main>
 
       {overlay}
-      {notice && <NoticeToast key={renderKey} notice={notice} />}
-      <RequestProgress key={renderKey} />
+      {notice && <NoticeToast key={`toast-${renderKey}`} notice={notice} />}
+      <RequestProgress key={`progress-${renderKey}`} />
     </div>
   );
 }
